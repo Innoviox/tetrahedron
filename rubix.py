@@ -12,7 +12,7 @@ class Color(Enum):
 
     def next(self, direction):
         d = int(0.5 * direction.value + 0.5) # -1 -> 0, 1 -> 1
-        return [[Color.YELLOW, Color.GREEN], [Color.RED, Color.YELLOW],
+        return [[Color.YELLOW, Color.GREEN], [Color.RED, Color.BLUE],
                 [Color.GREEN, Color.RED], [Color.YELLOW, Color.GREEN]][self.value - 1][d]
     
 class Dir(Enum):
@@ -33,7 +33,7 @@ pieces = {
     10: [Color.RED],
     11: [Color.RED, Color.GREEN, Color.BLUE],
     12: [Color.GREEN],
-    13: [Color.GREEN, Color.BLUE],
+    13: [Color.BLUE, Color.GREEN],
     14: [Color.GREEN],
     15: [Color.GREEN, Color.BLUE, Color.YELLOW],
     16: [Color.YELLOW],
@@ -47,7 +47,7 @@ for k, v in pieces.items(): pieces[k] = deque(v)
 
 order = [[0, 3, 2, 1, 8, 7, 6, 5, 4],
          [0, 3, 2, 1, 8, 7, 6, 5, 4],
-         [0, 1, 4, 6, 8, 3, 2, 5, 7],
+         [0, 1, 4, 8, 6, 3, 2, 5, 7],
          [0, 3, 1, 2, 8, 7, 6, 5, 4]]
 move_arr = [[[0],  [[1, 3, 5],    [2, 4, 6]]],
             [[11], [[10, 12, 19], [3, 13, 9]]],
@@ -77,10 +77,14 @@ class Tetra():
             new = [self.pieces[i] for i in rot]
             for k, (i, j) in enumerate(zip(arr, new)):
                 j.reverse()
+                # if move == Color.RED:
                 if direction == Dir.LEFT and move in j and move.next(direction) in j:
                     j.reverse()
                 elif direction == Dir.RIGHT and move not in j:
                     j.reverse()
+                # if move == Color.GREEN:
+                #     if direction == Dir.RIGHT and move not in j:
+                #         j.reverse()
                 print("setting", i, j)
                 self.pieces[i] = j
 
@@ -91,7 +95,7 @@ class Tetra():
             # x = sorted(enumerate(sides[c]), key=lambda i: order[c.value - 1][i[0]])
             x = [sides[c][i] for i in order[c.value - 1]]
             print(x)
-            print(self.pieces[5])
+            # print(self.pieces[5])
             x = [self.pieces[j][k].name[0] for (j, k) in x]
             print(x)
             s += side.format(*x)
@@ -106,6 +110,8 @@ class Tetra():
         
                 
 t = Tetra()
-t.move(Color.RED, 1, Dir.RIGHT)
-# t.move(Color.RED, 1, Dir.LEFT)
+
+# Corkin's First Axiom
+t.move(Color.YELLOW, 1, Dir.LEFT)
+
 print(t)
