@@ -47,8 +47,8 @@ for k, v in pieces.items(): pieces[k] = deque(v)
 
 order = [[0, 3, 2, 1, 8, 7, 6, 5, 4],
          [0, 3, 2, 1, 8, 7, 6, 5, 4],
-         [0, 1, 4, 8, 6, 3, 2, 5, 7],
-         [0, 3, 1, 2, 8, 7, 6, 5, 4]]
+         [0, 1, 8, 5, 2, 6, 3, 7, 4],
+         [0, 1, 3, 2, 4, 8, 7, 6, 5]]
 move_arr = [[[0],  [[1, 3, 5],    [2, 4, 6]]],
             [[11], [[10, 12, 19], [3, 13, 9]]],
             [[15], [[16, 14, 20], [5, 13, 17]]],
@@ -92,10 +92,13 @@ class Tetra():
         s = ""
         for c in Color:
             print(c, sides[c])
+            o = order[c.value - 1]
             # x = sorted(enumerate(sides[c]), key=lambda i: order[c.value - 1][i[0]])
-            x = [sides[c][i] for i in order[c.value - 1]]
+            # x = [sides[c][o[i]] for i in range(len(sides[c]))]
+            x = [sides[c][i] for i in o]
             print(x)
             # print(self.pieces[5])
+            print([[i.name[0] for i in self.pieces[j]] for (j, k) in x])
             x = [self.pieces[j][k].name[0] for (j, k) in x]
             print(x)
             s += side.format(*x)
@@ -112,6 +115,6 @@ class Tetra():
 t = Tetra()
 
 # Corkin's First Axiom
-t.move(Color.YELLOW, 1, Dir.LEFT)
+t.move(Color.YELLOW, 1, Dir.RIGHT)
 
 print(t)
