@@ -71,8 +71,14 @@ class Tetra():
 
     def __str__(self):
         s = ""
+        for c in Color:
+            for i, (piece, color) in enumerate(sorted(sides[c], key=lambda i: i[0])):
+                s += {0: "  ", 1: " "}.get(i, "")
+                s += self.pieces[piece][color].name[0]
+                s += {0: "  \n", 3: " \n", 8: "\n"}.get(i, "")
+        return s
         
                 
 t = Tetra()
-t.move(Color.BLUE, 1, Dir.LEFT)
-print(t.pieces)
+t.move(Color.RED, 1, Dir.LEFT)
+print(t)
