@@ -11,13 +11,13 @@ class Color(Enum):
     YELLOW = 4 # RIGHT
     
 class Dir(Enum):
-    LEFT  = 1 # also DOWN
-    RIGHT = -1 # also UP
+    LEFT  = 1 # also UP
+    RIGHT = -1 # also DOWN
 
 move_arr = [[[0], [[1, 3, 5], [2, 4, 6]]],
-            [[11], [[10, 12, 19], [3, 9, 13]]],
-            [[15], [[16, 20, 14], [5, 17, 13]]],
-            [[7], [[8, 21, 18], [1, 9, 17]]]]
+            [[11], [[10, 12, 19], [3, 13, 9]]],
+            [[15], [[16, 14, 20], [5, 13, 17]]],
+            [[7], [[8, 18, 21], [1, 17, 9]]]]
 pieces = {
      0: [Color.RED, Color.GREEN, Color.YELLOW],
      1: [Color.RED, Color.YELLOW],
@@ -34,7 +34,7 @@ pieces = {
     12: [Color.GREEN],
     13: [Color.GREEN, Color.BLUE],
     14: [Color.GREEN],
-    15: [Color.GREEN, Color.YELLOW, Color.BLUE],
+    15: [Color.GREEN, Color.BLUE, Color.YELLOW],
     16: [Color.YELLOW],
     17: [Color.YELLOW, Color.BLUE],
     18: [Color.YELLOW],
@@ -52,6 +52,7 @@ class Tetra():
         affected = move_arr[move.value - 1][level]
         if level == 0:
             self.pieces[affected[0]].rotate(direction.value)
+            print("setting", affected[0], self.pieces[affected[0]])
             return
         self.move(move, 0, direction)
         
@@ -62,7 +63,11 @@ class Tetra():
             for i, j in zip(arr, new):
                 print("setting", i, j)
                 self.pieces[i] = j
+
+    def __str__(self):
+        s = ""
+        
                 
 t = Tetra()
-t.move(Color.RED, 1, Dir.LEFT)
+t.move(Color.BLUE, 1, Dir.LEFT)
 print(t.pieces)
