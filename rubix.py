@@ -9,25 +9,12 @@ class Color(Enum):
     GREEN  = 2
     BLUE   = 3
     YELLOW = 4
-
-class Move(Enum):
-    TOP   = 1
-    LEFT  = 2
-    RIGHT = 3
-    FRONT = 4
-
+    
 class Dir(Enum):
     LEFT  = -1 # also DOWN
     RIGHT = 1 # also UP
 
-class Side(Enum):
-    FRONT  = 1 # also TOP for orientation purposes
-    LEFT   = 2
-    RIGHT  = 3
-    BOTTOM = 4
-
-def corner_orientation(colors):
-    
+CORNERS = [[1, 2, 4], [3, 1, 4], [3, 2, 1], [2, 4, 3]]
 
 class Piece:
     def __init__(self, colors, orientation=None):
@@ -38,10 +25,6 @@ class Piece:
             self.orientation = corner_orientation(colors)
 
     
-CORNERS = [[1, 2, 4], [3, 1, 4], [3, 2, 1], [2, 4, 3]]
-
-center_os = [[Side.FRONT, Side.LEFT, Side.RIGHT], [Side.FRONT, Side.RIGHT, Side.LEFT],
-             [Side.FRONT, Side.RIGHT, Side.LEFT], [Side.FRONT, Side.RIGHT, Side.LEFT]]
 
 class Cube:
     def __init__(self):
