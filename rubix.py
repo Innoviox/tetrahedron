@@ -21,10 +21,15 @@ class Dir(Enum):
     RIGHT = 1 # also UP
 
 class Side(Enum):
-    FRONT  = 1
+    FRONT  = 1 # also TOP for orientation purposes
     LEFT   = 2
     RIGHT  = 3
     BOTTOM = 4
+
+class O(Enum): # Orientation is really long
+    TOP   = 1
+    LEFT  = 2
+    RIGHT = 3 
 
 class Piece:
     def __init__(self, colors, orientation=None):
@@ -34,15 +39,17 @@ class Piece:
     
 CORNERS = [[1, 2, 4], [3, 1, 4], [3, 2, 1], [2, 4, 3]]
 
+ORIENTATIONS = [[O.TOP, O.LEFT, O.RIGHT], [O.TOP, O.RIGHT, O.LEFT],
+                [O.TOP, O.RIGHT, O.LEFT], [O.TOP, O.RIGHT, O.LEFT]]
+
 class Cube:
     def __init__(self):
         self.pieces = []
         self.pieces.extend(map(Piece, map(lambda i: list(map(Color, i)), CORNERS)))
         self.pieces.extend(map(Piece, combinations(Color, 2)))
-        for i in range(3):
+        for o in orientation=ORIENTATIONS[p.value]:
             for c in Color:
-                for p in [Side.FRONT, Side.LEFT, Side.TOP]:
-                    self.pieces.append(Piece(c, orientation=p))
+                self.pieces.append(Piece(c, o))
 
     def move(self, move: Move, level: int, direction: Dir):
         sides = self.get_sides(move)
@@ -51,10 +58,11 @@ class Cube:
             piece.colors.rotate(direction.value)
         else:
             self.move(move, level=1, direction)
+            centers = filter(lambda i: 
             
         # sides.rotate(direction.value)
         # print(sides)
-        
+    
     def get_sides(self, move: Move):
         return deque(CORNERS[move.value - 1])
 
