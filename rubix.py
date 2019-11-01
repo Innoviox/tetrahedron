@@ -40,6 +40,10 @@ pieces = {
 }
 for k, v in pieces.items(): pieces[k] = deque(v)
 
+order = [[0, 3, 2, 1, 8, 7, 6, 5, 4],
+         [0, 3, 2, 1, 8, 7, 6, 5, 4],
+         [0, 1, 4, 6, 8, 3, 2, 5, 7],
+         [0, 3, 1, 2, 8, 7, 6, 5, 4]]
 move_arr = [[[0],  [[1, 3, 5],    [2, 4, 6]]],
             [[11], [[10, 12, 19], [3, 13, 9]]],
             [[15], [[16, 14, 20], [5, 13, 17]]],
@@ -48,6 +52,7 @@ sides = {i: [] for i in Color}
 for n, colors in pieces.items():
     for i, c in enumerate(colors):
         sides[c].append([n, i])
+side = "  {0}  \n {1}{2}{3} \n{4}{5}{6}{7}{8}\n"
 
 class Tetra():
     def __init__(self):
@@ -66,16 +71,26 @@ class Tetra():
             rot.rotate(direction.value)
             new = [self.pieces[i] for i in rot]
             for i, j in zip(arr, new):
+                j.reverse()
                 print("setting", i, j)
                 self.pieces[i] = j
 
     def __str__(self):
         s = ""
         for c in Color:
-            for i, (piece, color) in enumerate(sorted(sides[c], key=lambda i: i[0])):
-                s += {0: "  ", 1: " "}.get(i, "")
-                s += self.pieces[piece][color].name[0]
-                s += {0: "  \n", 3: " \n", 8: "\n"}.get(i, "")
+            print(c, sides[c])
+            x = sorted(enumerate(sides[c]), key=lambda i: order[c.value - 1][i[0]])
+            print(x)
+            x = [self.pieces[j][k].name[0] for i, (j, k) in x]
+            print(x)
+            s += side.format(*x)
+            # print(c, x)
+            # s = sides[c][order[i]]
+            # for i, (piece, color) in enumerate(sides[c]):
+            #     s = ""
+                # s += {0: "  ", 1: " "}.get(i, "")
+                # s += self.pieces[piece][color].name[0]
+                # s += {0: "  \n", 3: " \n", 8: "\n"}.get(i, "")
         return s
         
                 
