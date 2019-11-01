@@ -77,10 +77,10 @@ class Tetra():
             new = [self.pieces[i] for i in rot]
             for k, (i, j) in enumerate(zip(arr, new)):
                 j.reverse()
-                if move in j and move.next(direction) in j:
+                if direction == Dir.LEFT and move in j and move.next(direction) in j:
                     j.reverse()
-                # if direction == Dir.LEFT and k != 2: j.reverse()
-                # elif direction == Dir.RIGHT and k == 1: j.reverse()
+                elif direction == Dir.RIGHT and move not in j:
+                    j.reverse()
                 print("setting", i, j)
                 self.pieces[i] = j
 
