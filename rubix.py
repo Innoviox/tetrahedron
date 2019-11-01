@@ -9,6 +9,11 @@ class Color(Enum):
     GREEN  = 2 # LEFT
     BLUE   = 3 # BACK
     YELLOW = 4 # RIGHT
+
+    def next(self, direction):
+        d = int(0.5 * direction.value + 0.5) # -1 -> 0, 1 -> 1
+        return [[Color.YELLOW, Color.GREEN], [Color.RED, Color.YELLOW],
+                [Color.GREEN, Color.RED], [Color.YELLOW, Color.GREEN]][self.value - 1][d]
     
 class Dir(Enum):
     LEFT  = 1 # also UP
@@ -70,8 +75,12 @@ class Tetra():
             rot = deque(arr)
             rot.rotate(direction.value)
             new = [self.pieces[i] for i in rot]
-            for i, j in zip(arr, new):
+            for k, (i, j) in enumerate(zip(arr, new)):
                 j.reverse()
+                if move in j and move.next(direction) in j:
+                    j.reverse()
+                # if direction == Dir.LEFT and k != 2: j.reverse()
+                # elif direction == Dir.RIGHT and k == 1: j.reverse()
                 print("setting", i, j)
                 self.pieces[i] = j
 
@@ -79,9 +88,11 @@ class Tetra():
         s = ""
         for c in Color:
             print(c, sides[c])
-            x = sorted(enumerate(sides[c]), key=lambda i: order[c.value - 1][i[0]])
+            # x = sorted(enumerate(sides[c]), key=lambda i: order[c.value - 1][i[0]])
+            x = [sides[c][i] for i in order[c.value - 1]]
             print(x)
-            x = [self.pieces[j][k].name[0] for i, (j, k) in x]
+            print(self.pieces[5])
+            x = [self.pieces[j][k].name[0] for (j, k) in x]
             print(x)
             s += side.format(*x)
             # print(c, x)
@@ -95,5 +106,6 @@ class Tetra():
         
                 
 t = Tetra()
-t.move(Color.RED, 1, Dir.LEFT)
+t.move(Color.RED, 1, Dir.RIGHT)
+# t.move(Color.RED, 1, Dir.LEFT)
 print(t)
