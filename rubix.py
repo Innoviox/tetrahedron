@@ -11,15 +11,15 @@ class Color(Enum):
     YELLOW = 4 # RIGHT
     
 class Dir(Enum):
-    LEFT  = -1 # also DOWN
-    RIGHT = 1 # also UP
+    LEFT  = 1 # also DOWN
+    RIGHT = -1 # also UP
 
-move_arr = [[[0], [1, 2, 3, 4, 5, 6]],
-            [[11], [3, 12, 13, 19, 9, 10]],
-            [[15], [5, 16, 17, 20, 13, 14]],
-            [[7], [1, 8, 9, 21, 17, 18]]]
+move_arr = [[[0], [[1, 3, 5], [2, 4, 6]]],
+            [[11], [[10, 12, 19], [3, 9, 13]]],
+            [[15], [[16, 20, 14], [5, 17, 13]]],
+            [[7], [[8, 21, 18], [1, 9, 17]]]]
 pieces = {
-     0: [Color.RED, Color.GREEN, Color.YELLOW]
+     0: [Color.RED, Color.GREEN, Color.YELLOW],
      1: [Color.RED, Color.YELLOW],
      2: [Color.RED],
      3: [Color.RED, Color.GREEN],
@@ -42,16 +42,27 @@ pieces = {
     20: [Color.BLUE],
     21: [Color.BLUE]
 }
-for k, v in pieces: pieces[k] = deque(v)
+for k, v in pieces.items(): pieces[k] = deque(v)
 
 class Tetra():
     def __init__(self):
-        self.pieces = pieces[:]
+        self.pieces = pieces.copy()
 
     def move(self, move: Color, level: int, direction: Dir):
-        affected = move_arr[move.value][level]
-        for i in affected:
-            self.pieces[i].rotate(direction.value)
-
+        affected = move_arr[move.value - 1][level]
+        if level == 0:
+            self.pieces[affected[0]].rotate(direction.value)
+            return
+        self.move(move, 0, direction)
+        
+        for arr in affected:
+            rot = deque(arr)
+            rot.rotate(direction.value)
+            new = [self.pieces[i] for i in rot]
+            for i, j in zip(arr, new):
+                print("setting", i, j)
+                self.pieces[i] = j
+                
 t = Tetra()
+t.move(Color.RED, 1, Dir.LEFT)
 print(t.pieces)
