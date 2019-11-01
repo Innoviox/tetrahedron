@@ -3,6 +3,7 @@ from enum import EnumMeta, Enum
 from typing import List
 from collections import deque
 from itertools import starmap, combinations, chain, repeat
+from copy import deepcopy
 
 class Color(Enum):
     RED    = 1 # TOP
@@ -13,7 +14,7 @@ class Color(Enum):
     def next(self, direction):
         d = int(0.5 * direction.value + 0.5) # -1 -> 0, 1 -> 1
         return [[Color.YELLOW, Color.GREEN], [Color.RED, Color.BLUE],
-                [Color.GREEN, Color.RED], [Color.YELLOW, Color.GREEN]][self.value - 1][d]
+                [Color.YELLOW, Color.GREEN], [Color.BLUE, Color.RED]][self.value - 1][d]
     
 class Dir(Enum):
     LEFT  = 1 # also UP
@@ -61,13 +62,13 @@ side = "  {0}  \n {1}{2}{3} \n{4}{5}{6}{7}{8}\n"
 
 class Tetra():
     def __init__(self):
-        self.pieces = pieces.copy()
+        self.pieces = deepcopy(pieces)
 
     def move(self, move: Color, level: int, direction: Dir):
         affected = move_arr[move.value - 1][level]
         if level == 0:
             self.pieces[affected[0]].rotate(direction.value)
-            print("setting", affected[0], self.pieces[affected[0]])
+            # print("setting", affected[0], self.pieces[affected[0]])
             return
         self.move(move, 0, direction)
         
@@ -77,30 +78,30 @@ class Tetra():
             new = [self.pieces[i] for i in rot]
             for k, (i, j) in enumerate(zip(arr, new)):
                 j.reverse()
-                # if move == Color.RED:
                 if direction == Dir.LEFT and move in j and move.next(direction) in j:
                     j.reverse()
-                elif direction == Dir.RIGHT and move not in j:
-                    j.reverse()
-                # if move == Color.GREEN:
-                #     if direction == Dir.RIGHT and move not in j:
-                #         j.reverse()
-                print("setting", i, j)
+                elif direction == Dir.RIGHT:
+                    if move == Color.YELLOW:
+                        if (move in j and move.next(direction) in j):
+                            j.reverse()
+                    elif move not in j:
+                        j.reverse() 
+                # print("setting", i, j)
                 self.pieces[i] = j
 
     def __str__(self):
         s = ""
         for c in Color:
-            print(c, sides[c])
+            # print(c, sides[c])
             o = order[c.value - 1]
             # x = sorted(enumerate(sides[c]), key=lambda i: order[c.value - 1][i[0]])
             # x = [sides[c][o[i]] for i in range(len(sides[c]))]
             x = [sides[c][i] for i in o]
-            print(x)
+            # print(x)
             # print(self.pieces[5])
-            print([[i.name[0] for i in self.pieces[j]] for (j, k) in x])
+            # print([[i.name[0] for i in self.pieces[j]] for (j, k) in x])
             x = [self.pieces[j][k].name[0] for (j, k) in x]
-            print(x)
+            # print(x)
             s += side.format(*x)
             # print(c, x)
             # s = sides[c][order[i]]
@@ -111,10 +112,84 @@ class Tetra():
                 # s += {0: "  \n", 3: " \n", 8: "\n"}.get(i, "")
         return s
         
-                
-t = Tetra()
+def test():
+    strs = {
+        Color.RED: {Dir.LEFT: """  Y  
+ YYY 
+RRRRR
+  R  
+ RRR 
+GGGGG
+  B  
+ BBB 
+BBBBB
+  G  
+ GGG 
+YYYYY""", Dir.RIGHT: """  G  
+ GGG 
+RRRRR
+  Y  
+ YYY 
+GGGGG
+  B  
+ BBB 
+BBBBB
+  R  
+ RRR 
+YYYYY"""}, Color.GREEN: {Dir.LEFT: """  R  
+ BRR 
+BBBRR
+  G  
+ GGR 
+GGRRR
+  B  
+ GBB 
+GGGBB
+  Y  
+ YYY
+YYYYY""", Dir.RIGHT: """  R  
+ GRR 
+GGGRR
+  G  
+ GGB 
+GGBBB
+  B  
+ RBB 
+RRRBB
+  Y  
+ YYY 
+YYYYY"""}, Color.YELLOW: {Dir.LEFT: """  R  
+ RRB 
+RRBBB
+  G  
+ GGG 
+GGGGG
+  Y  
+ YYY 
+BBBBB
+  Y  
+ RYY 
+RRRYY""", Dir.RIGHT: """  R  
+ RRY 
+RRYYY
+  G  
+ GGG 
+GGGGG
+  R  
+ RRR 
+BBBBB
+  Y  
+ BYY 
+BBBYY"""}}
+    for c in Color:
+        for d in Dir:
+            t = Tetra()
+            t.move(c, 1, d)
+            if c not in strs: continue
+            if ''.join(str(t).strip().split()) == ''.join(strs[c][d].strip().split()):
+                print(f"passed test {c} {d}")
+            else:
+                print(f"failed test {c} {d}")
 
-# Corkin's First Axiom
-t.move(Color.YELLOW, 1, Dir.RIGHT)
 
-print(t)
+test()
