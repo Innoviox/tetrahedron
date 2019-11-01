@@ -14,10 +14,6 @@ class Dir(Enum):
     LEFT  = 1 # also UP
     RIGHT = -1 # also DOWN
 
-move_arr = [[[0], [[1, 3, 5], [2, 4, 6]]],
-            [[11], [[10, 12, 19], [3, 13, 9]]],
-            [[15], [[16, 14, 20], [5, 13, 17]]],
-            [[7], [[8, 18, 21], [1, 17, 9]]]]
 pieces = {
      0: [Color.RED, Color.GREEN, Color.YELLOW],
      1: [Color.RED, Color.YELLOW],
@@ -43,6 +39,15 @@ pieces = {
     21: [Color.BLUE]
 }
 for k, v in pieces.items(): pieces[k] = deque(v)
+
+move_arr = [[[0],  [[1, 3, 5],    [2, 4, 6]]],
+            [[11], [[10, 12, 19], [3, 13, 9]]],
+            [[15], [[16, 14, 20], [5, 13, 17]]],
+            [[7],  [[8, 18, 21],  [1, 17, 9]]]]
+sides = {i: [] for i in Color}
+for n, colors in pieces.items():
+    for i, c in enumerate(colors):
+        sides[c].append([n, i])
 
 class Tetra():
     def __init__(self):
