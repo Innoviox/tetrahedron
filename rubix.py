@@ -26,28 +26,29 @@ class Side(Enum):
     RIGHT  = 3
     BOTTOM = 4
 
-class O(Enum): # Orientation is really long
-    TOP   = 1
-    LEFT  = 2
-    RIGHT = 3 
+def corner_orientation(colors):
+    
 
 class Piece:
     def __init__(self, colors, orientation=None):
         self.colors = deque(colors)
         self.orientation = orientation
-        
+
+        if len(colors) == 2:
+            self.orientation = corner_orientation(colors)
+
     
 CORNERS = [[1, 2, 4], [3, 1, 4], [3, 2, 1], [2, 4, 3]]
 
-ORIENTATIONS = [[O.TOP, O.LEFT, O.RIGHT], [O.TOP, O.RIGHT, O.LEFT],
-                [O.TOP, O.RIGHT, O.LEFT], [O.TOP, O.RIGHT, O.LEFT]]
+center_os = [[Side.FRONT, Side.LEFT, Side.RIGHT], [Side.FRONT, Side.RIGHT, Side.LEFT],
+             [Side.FRONT, Side.RIGHT, Side.LEFT], [Side.FRONT, Side.RIGHT, Side.LEFT]]
 
 class Cube:
     def __init__(self):
         self.pieces = []
         self.pieces.extend(map(Piece, map(lambda i: list(map(Color, i)), CORNERS)))
         self.pieces.extend(map(Piece, combinations(Color, 2)))
-        for o in orientation=ORIENTATIONS[p.value]:
+        for o in center_os[p.value]:
             for c in Color:
                 self.pieces.append(Piece(c, o))
 
