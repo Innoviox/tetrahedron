@@ -78,8 +78,14 @@ class Tetra():
             new = [self.pieces[i] for i in rot]
             for k, (i, j) in enumerate(zip(arr, new)):
                 j.reverse()
-                if direction == Dir.LEFT and move in j and move.next(direction) in j:
-                    j.reverse()
+                if direction == Dir.LEFT:
+                    if move == Color.BLUE:
+                        j.reverse()
+                        pass
+                        # if move in j:
+                        #    j.reverse()
+                    elif move in j and move.next(direction) in j:
+                        j.reverse()
                 elif direction == Dir.RIGHT:
                     if move == Color.YELLOW:
                         if (move in j and move.next(direction) in j):
@@ -180,16 +186,31 @@ GGGGG
 BBBBB
   Y  
  BYY 
-BBBYY"""}}
+BBBYY"""}, Color.BLUE: {Dir.LEFT: """  R  
+ RRR 
+RRRRR
+  G  
+ YGG 
+YYYGG
+  B  
+ BBG 
+BBGGG
+  Y  
+ YYB 
+YYBBB"""}}
     for c in Color:
         for d in Dir:
             t = Tetra()
             t.move(c, 1, d)
             if c not in strs: continue
+            if d not in strs[c]: continue
             if ''.join(str(t).strip().split()) == ''.join(strs[c][d].strip().split()):
                 print(f"passed test {c} {d}")
             else:
                 print(f"failed test {c} {d}")
 
-
 test()
+
+t = Tetra()
+t.move(Color.BLUE, 1, Dir.LEFT)
+print(t)
