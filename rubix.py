@@ -78,18 +78,18 @@ class Tetra():
             new = [self.pieces[i] for i in rot]
             for k, (i, j) in enumerate(zip(arr, new)):
                 j.reverse()
+                ## no idea why the following rules are necessary but they are
                 if direction == Dir.LEFT:
                     if move == Color.BLUE:
                         j.reverse()
-                        pass
-                        # if move in j:
-                        #    j.reverse()
                     elif move in j and move.next(direction) in j:
                         j.reverse()
                 elif direction == Dir.RIGHT:
                     if move == Color.YELLOW:
                         if (move in j and move.next(direction) in j):
                             j.reverse()
+                    elif move == Color.BLUE:
+                        j.reverse()
                     elif move not in j:
                         j.reverse() 
                 # print("setting", i, j)
@@ -197,7 +197,18 @@ YYYGG
 BBGGG
   Y  
  YYB 
-YYBBB"""}}
+YYBBB""", Dir.RIGHT: """  R  
+ RRR 
+RRRRR
+  G  
+ BGG 
+BBBGG
+  B  
+ BBY 
+BBYYY
+  Y  
+ YYG 
+YYGGG"""}}
     for c in Color:
         for d in Dir:
             t = Tetra()
@@ -210,7 +221,3 @@ YYBBB"""}}
                 print(f"failed test {c} {d}")
 
 test()
-
-t = Tetra()
-t.move(Color.BLUE, 1, Dir.LEFT)
-print(t)
