@@ -221,3 +221,19 @@ YYGGG"""}}
                 print(f"failed test {c} {d}")
 
 test()
+
+def corkin_1():
+    t = Tetra()
+
+    t.move(Color.GREEN, 1, Dir.RIGHT)
+    t.move(Color.YELLOW, 1, Dir.RIGHT)
+    t.move(Color.GREEN, 1, Dir.LEFT)
+    t.move(Color.YELLOW, 1, Dir.LEFT)
+    t.move(Color.GREEN, 1, Dir.LEFT)
+    t.move(Color.RED, 1, Dir.LEFT)
+    t.move(Color.GREEN, 1, Dir.RIGHT)
+    t.move(Color.RED, 1, Dir.RIGHT)
+
+    print(t)
+
+corkin_1()
