@@ -86,7 +86,7 @@ class Paint:
         }
         
         # self.__keys_handler = keys_handler
-        self.__size = 450, 450
+        self.__size = 800, 800
         self.__clock = pygame.time.Clock()
         self.__screen = pygame.display.set_mode(self.__size)
         self.__mainloop()

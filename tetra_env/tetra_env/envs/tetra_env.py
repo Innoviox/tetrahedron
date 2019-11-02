@@ -51,7 +51,7 @@ class TetraEnv(gym.Env):
     def render(self, mode='human', close=False):
         assert mode in TetraEnv.metadata['render.modes']
         if mode == 'none':
-            print(self.tetra.score())
+            print(round(self.tetra.score(), 2))
         else:
             render(self.tetra)
                 
