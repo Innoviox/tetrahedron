@@ -3,7 +3,6 @@ from numpy import array
 from math import cos, sin
 from itertools import combinations
 
-
 ######################
 #                    #
 #    math section    #
@@ -44,7 +43,8 @@ class Physical:
     @property
     def faces(self):
         location = self.__vertices.dot(rotation_matrix(*self.__rotation))  # an index->location mapping
-        return ((location[v1], location[v2], location[v3], fill) for v1, v2, v3, fill in self.__faces)
+        for side in self.__faces:
+            yield ((location[v1], location[v2], location[v3], fill) for v1, v2, v3, fill in side)
 
 
 ######################
@@ -84,14 +84,25 @@ class Paint:
         self.__keys_handler(pygame.key.get_pressed())
 
     def __draw_shape(self, thickness=4):
-        x = list(self.__shape.faces)
+        sides = list(map(list, self.__shape.faces))
+        sides = sorted(sides, key=lambda i: self.get_center(i)[2])
         # x = sorted(x, key=lambda i: i[-1][2])
-        for points in x:
-            *points, fill = points
-            # pygame.draw.line(self.__screen, RED, self.__fit(start), self.__fit(end), thickness)
-            pygame.draw.polygon(self.__screen, colors[fill], list(map(self.__fit, points)))
-            for start, end in combinations(points, 2):
-                pygame.draw.line(self.__screen, BLACK, self.__fit(start), self.__fit(end), thickness)
+        for side in sides:
+            for points in side:
+                *points, fill = points
+                # pygame.draw.line(self.__screen, RED, self.__fit(start), self.__fit(end), thickness)
+                pygame.draw.polygon(self.__screen, colors[fill], list(map(self.__fit, points)))
+                for start, end in combinations(points, 2):
+                    pygame.draw.line(self.__screen, BLACK, self.__fit(start), self.__fit(end), thickness)
+
+    def get_center(self, side):
+        a, b, c = 0, 0, 0
+        for j in side:
+            for i in j[:-1]:
+                a += i[0]
+                b += i[1]
+                c += i[2]
+        return (a / len(side), b / len(side), c / len(side))
 
     def __mainloop(self):
         while True:
@@ -118,12 +129,13 @@ def main():
     for i in open("tetra.txt"):
         if i.startswith("#"):
             _, fill, *_ = i.split()
+            faces.append([])
         if i.startswith("v"):
             _, a, b, c = i.split()
             vertices.append([-int(a), -int(b), -int(c)])
         elif i.startswith("f"):
             _, a, b, c = i.split()
-            faces.append([int(a), int(b), int(c), fill])
+            faces[-1].append([int(a), int(b), int(c), fill])
 
     cube = Physical(
         vertices=vertices,
