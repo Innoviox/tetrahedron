@@ -2,7 +2,7 @@ import pygame
 from numpy import array
 from math import cos, sin
 from itertools import combinations
-from rubix import Tetra, Color, Dir
+from .rubix import Tetra, Color, Dir
 from pygame import K_q, K_w, K_a, K_s, K_z, K_x
 
 ######################
@@ -151,12 +151,12 @@ class Paint:
         return (a / len(side), b / len(side), c / len(side))
 
     def __mainloop(self):
-        while True:
-            self.__handle_events()
-            self.__screen.fill(BLACK)
-            self.__draw_shape()
-            pygame.display.flip()
-            self.__clock.tick(40)
+        # while True:
+        self.__handle_events()
+        self.__screen.fill(BLACK)
+        self.__draw_shape()
+        pygame.display.flip()
+        self.__clock.tick(40)
 
 
 ######################
@@ -170,7 +170,7 @@ class Paint:
 vertices = []
 faces = []
 fill = None
-for i in open("tetra.txt"):
+for i in open("tetra_env/tetra_env/envs/tetra.txt"):
     if i.startswith("#"):
         _, fill, *_ = i.split()
         faces.append([])
@@ -192,5 +192,5 @@ def render(tetra):
     pygame.display.set_caption('Control -   q,w : X    a,s : Y    z,x : Z')
     Paint(cube)
 
-render(Tetra())
+# render(Tetra())
 

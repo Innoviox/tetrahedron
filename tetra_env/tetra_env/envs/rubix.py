@@ -1,6 +1,8 @@
 from .constants import *
 from copy import deepcopy
 from random import choice, randint
+from gym import spaces
+import numpy as np
 
 class Tetra():
     def __init__(self):
@@ -31,6 +33,16 @@ class Tetra():
     def random(self, n):
         for i in range(n):
             self.move(choice(list(Color)), randint(0, 1), choice([Dir.LEFT, Dir.RIGHT]))
+
+    def to_space(self):
+        box = np.zeros((4, 9))
+        for c in Color:
+            o = order[c.value - 1]
+            x = [sides[c][i] for i in o]
+            x = np.array([self.pieces[j][k].value - 1 for (j, k) in x])
+            box[c.value - 1] = x
+        # print(box)
+        return box
 
     def __str__(self):
         # return ''.join(side.format(*[self.pieces[j][k].name[0] for (j, k) in [sides[c][i] for i in order[c.value - 1]]]) for c in Color)

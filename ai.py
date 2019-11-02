@@ -20,6 +20,8 @@ env = gym.make(ENV_NAME)
 np.random.seed(123)
 env.seed(123)
 nb_actions = env.action_space.n
+print(env.action_space, nb_actions)
+print(env.observation_space)
 
 # Next, we build a very simple model.
 model = Sequential()
@@ -32,7 +34,7 @@ model.add(Dense(16))
 model.add(Activation('relu'))
 model.add(Dense(nb_actions))
 model.add(Activation('linear'))
-print(model.summary())
+model.summary()
 
 # Finally, we configure and compile our agent. You can use every built-in Keras optimizer and
 # even the metrics!
