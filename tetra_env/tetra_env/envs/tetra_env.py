@@ -35,20 +35,17 @@ class TetraEnv(gym.Env):
 
     def step(self, action):  # action is number from 1-16
         self.tetra.move(*actions[action])
-
-        info = {}
         
         s = self.tetra.score()
 
         if action in self.memory:
             s /= 20 # ABSOLUTELY NO punish repeat actions
-            info['warn'] = 'punished'
         
         if len(self.memory) == self.memory_length:
             self.memory.pop(0)
         self.memory.append(action)
         
-        return self.tetra.to_space(), s, s>0.99, info
+        return self.tetra.to_space(), s, s>0.99, {}
 
     def reset(self):
         self.tetra = Tetra()
