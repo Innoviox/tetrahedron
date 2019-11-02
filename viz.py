@@ -1,6 +1,7 @@
 import pygame
 from numpy import array
 from math import cos, sin
+from itertools import combinations
 
 
 ######################
@@ -27,23 +28,23 @@ def rotation_matrix(α, β, γ):
 
 
 class Physical:
-    def __init__(self, vertices, edges):
+    def __init__(self, vertices, faces):
         """
         a 3D object that can rotate around the three axes
         :param vertices: a tuple of points (each has 3 coordinates)
         :param edges: a tuple of pairs (each pair is a set containing 2 vertices' indexes)
         """
         self.__vertices = array(vertices)
-        self.__edges = tuple(edges)
+        self.__faces = tuple(faces)
         self.__rotation = [0, 0, 0]  # radians around each axis
 
     def rotate(self, axis, θ):
         self.__rotation[axis] += θ
 
     @property
-    def lines(self):
+    def faces(self):
         location = self.__vertices.dot(rotation_matrix(*self.__rotation))  # an index->location mapping
-        return ((location[v1], location[v2]) for v1, v2 in self.__edges)
+        return ((location[v1], location[v2], location[v3]) for v1, v2, v3 in self.__faces)
 
 
 ######################
@@ -79,8 +80,11 @@ class Paint:
         self.__keys_handler(pygame.key.get_pressed())
 
     def __draw_shape(self, thickness=4):
-        for start, end in self.__shape.lines:
-            pygame.draw.line(self.__screen, RED, self.__fit(start), self.__fit(end), thickness)
+        for points in self.__shape.faces:
+            # pygame.draw.line(self.__screen, RED, self.__fit(start), self.__fit(end), thickness)
+            pygame.draw.polygon(self.__screen, RED, list(map(self.__fit, points)))
+            for start, end in combinations(points, 2):
+                pygame.draw.line(self.__screen, BLACK, self.__fit(start), self.__fit(end), thickness)
 
     def __mainloop(self):
         while True:
@@ -102,19 +106,19 @@ def main():
     from pygame import K_q, K_w, K_a, K_s, K_z, K_x
 
     vertices = []
-    edges = []
+    faces = []
     for i in open("tetra.txt"):
         if i.startswith("#"): continue
         if i.startswith("v"):
             _, a, b, c = i.split()
-            vertices.append([int(a), int(b), int(c)])
-        elif i.startswith("e"):
-            _, a, b = i.split()
-            edges.append({int(a), int(b)})
+            vertices.append([-int(a), -int(b), -int(c)])
+        elif i.startswith("f"):
+            _, a, b, c = i.split()
+            faces.append({int(a), int(b), int(c)})
 
     cube = Physical(
         vertices=vertices,
-        edges=edges
+        faces=faces
     )
 
     counter_clockwise = 0.05  # radians
