@@ -2,6 +2,7 @@ import pygame
 from numpy import array
 from math import cos, sin
 from itertools import combinations
+from rubix import Tetra, Color, Dir
 
 ######################
 #                    #
@@ -27,7 +28,7 @@ def rotation_matrix(α, β, γ):
 
 
 class Physical:
-    def __init__(self, vertices, faces):
+    def __init__(self, vertices, faces, tetra):
         """
         a 3D object that can rotate around the three axes
         :param vertices: a tuple of points (each has 3 coordinates)
@@ -37,6 +38,7 @@ class Physical:
         self.__faces = tuple(faces)
         self.__rotation = [0, 0, 0]  # radians around each axis
         self.shift = array([0, 0, 0])
+        self.tetra = tetra
 
     def rotate(self, axis, θ):
         self.__rotation[axis] += θ
@@ -46,8 +48,10 @@ class Physical:
         location = self.__vertices.dot(rotation_matrix(*self.__rotation))  # an index->location mapping
         location = list(map(self.shift.__add__, location))
         for side in self.__faces:
-            yield ((location[v1], location[v2], location[v3], fill) for v1, v2, v3, fill in side)
+            yield ((location[v1], location[v2], location[v3], f1, f2) for v1, v2, v3, f1, f2 in side)
 
+    def get_color(self, face, side):
+        return self.tetra.pieces[face][side].name.title()
 
 ######################
 #                    #
@@ -103,16 +107,17 @@ class Paint:
         # x = sorted(x, key=lambda i: i[-1][2])
         for side in sides:
             for points in side:
-                *points, fill = points
+                *points, f1, f2 = points
+                color = colors[self.__shape.get_color(f1, f2)]
                 # pygame.draw.line(self.__screen, RED, self.__fit(start), self.__fit(end), thickness)
-                pygame.draw.polygon(self.__screen, colors[fill], list(map(self.__fit, points)))
+                pygame.draw.polygon(self.__screen, color, list(map(self.__fit, points)))
                 for start, end in combinations(points, 2):
                     pygame.draw.line(self.__screen, BLACK, self.__fit(start), self.__fit(end), thickness)
 
     def get_center(self, side):
         a, b, c = 0, 0, 0
         for j in side:
-            for i in j[:-1]:
+            for i in j[:-2]:
                 a += i[0]
                 b += i[1]
                 c += i[2]
@@ -148,12 +153,16 @@ def main():
             _, a, b, c = i.split()
             vertices.append([-int(a), -int(b), -int(c)])
         elif i.startswith("f"):
-            _, a, b, c = i.split()
-            faces[-1].append([int(a), int(b), int(c), fill])
+            _, a, b, c, d, e = i.split()
+            faces[-1].append([int(a), int(b), int(c), int(d), int(e)])
+
+    tetra = Tetra()
+    tetra.move(Color.RED, 1, Dir.LEFT)
 
     cube = Physical(
         vertices=vertices,
-        faces=faces
+        faces=faces,
+        tetra=tetra
     )
 
     counter_clockwise = 0.05  # radians
