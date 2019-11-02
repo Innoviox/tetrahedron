@@ -156,13 +156,16 @@ def main():
             _, a, b, c, d, e = i.split()
             faces[-1].append([int(a), int(b), int(c), int(d), int(e)])
 
-    tetra = Tetra()
-    tetra.move(Color.RED, 1, Dir.LEFT)
+    t = Tetra()
+
+    t.random(50)
+
+    print(t.score())
 
     cube = Physical(
         vertices=vertices,
         faces=faces,
-        tetra=tetra
+        tetra=t
     )
 
     counter_clockwise = 0.05  # radians
