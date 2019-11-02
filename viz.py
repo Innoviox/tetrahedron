@@ -44,7 +44,7 @@ class Physical:
     @property
     def faces(self):
         location = self.__vertices.dot(rotation_matrix(*self.__rotation))  # an index->location mapping
-        return ((location[v1], location[v2], location[v3]) for v1, v2, v3 in self.__faces)
+        return ((location[v1], location[v2], location[v3], fill) for v1, v2, v3, fill in self.__faces)
 
 
 ######################
@@ -55,7 +55,11 @@ class Physical:
 
 
 BLACK, RED = (0, 0, 0), (255, 128, 128)
-
+colors = {'Red': (255, 0, 0),
+          'Green': (0, 255, 0),
+          'Blue': (0, 0, 255),
+          'Yellow': (255, 255, 0)
+          }
 
 class Paint:
     def __init__(self, shape, keys_handler):
@@ -81,8 +85,9 @@ class Paint:
 
     def __draw_shape(self, thickness=4):
         for points in self.__shape.faces:
+            *points, fill = points
             # pygame.draw.line(self.__screen, RED, self.__fit(start), self.__fit(end), thickness)
-            pygame.draw.polygon(self.__screen, RED, list(map(self.__fit, points)))
+            pygame.draw.polygon(self.__screen, colors[fill], list(map(self.__fit, points)))
             for start, end in combinations(points, 2):
                 pygame.draw.line(self.__screen, BLACK, self.__fit(start), self.__fit(end), thickness)
 
@@ -107,14 +112,16 @@ def main():
 
     vertices = []
     faces = []
+    fill = None
     for i in open("tetra.txt"):
-        if i.startswith("#"): continue
+        if i.startswith("#"):
+            _, fill, *_ = i.split()
         if i.startswith("v"):
             _, a, b, c = i.split()
             vertices.append([-int(a), -int(b), -int(c)])
         elif i.startswith("f"):
             _, a, b, c = i.split()
-            faces.append({int(a), int(b), int(c)})
+            faces.append([int(a), int(b), int(c), fill])
 
     cube = Physical(
         vertices=vertices,
