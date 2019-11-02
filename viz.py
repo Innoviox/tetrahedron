@@ -84,7 +84,9 @@ class Paint:
         self.__keys_handler(pygame.key.get_pressed())
 
     def __draw_shape(self, thickness=4):
-        for points in self.__shape.faces:
+        x = list(self.__shape.faces)
+        # x = sorted(x, key=lambda i: i[-1][2])
+        for points in x:
             *points, fill = points
             # pygame.draw.line(self.__screen, RED, self.__fit(start), self.__fit(end), thickness)
             pygame.draw.polygon(self.__screen, colors[fill], list(map(self.__fit, points)))
