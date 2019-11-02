@@ -139,33 +139,27 @@ class Paint:
 ######################
 
 
-def main():
-    from pygame import K_q, K_w, K_a, K_s, K_z, K_x
+from pygame import K_q, K_w, K_a, K_s, K_z, K_x
 
-    vertices = []
-    faces = []
-    fill = None
-    for i in open("tetra.txt"):
-        if i.startswith("#"):
-            _, fill, *_ = i.split()
-            faces.append([])
-        if i.startswith("v"):
-            _, a, b, c = i.split()
-            vertices.append([-int(a), -int(b), -int(c)])
-        elif i.startswith("f"):
-            _, a, b, c, d, e = i.split()
-            faces[-1].append([int(a), int(b), int(c), int(d), int(e)])
+vertices = []
+faces = []
+fill = None
+for i in open("tetra.txt"):
+    if i.startswith("#"):
+        _, fill, *_ = i.split()
+        faces.append([])
+    if i.startswith("v"):
+        _, a, b, c = i.split()
+        vertices.append([-int(a), -int(b), -int(c)])
+    elif i.startswith("f"):
+        _, a, b, c, d, e = i.split()
+        faces[-1].append([int(a), int(b), int(c), int(d), int(e)])
 
-    t = Tetra()
-
-    t.random(50)
-
-    print(t.score())
-
+def render(tetra):
     cube = Physical(
         vertices=vertices,
         faces=faces,
-        tetra=t
+        tetra=tetra
     )
 
     counter_clockwise = 0.05  # radians
@@ -189,5 +183,3 @@ def main():
     pygame.display.set_caption('Control -   q,w : X    a,s : Y    z,x : Z')
     Paint(cube, keys_handler)
 
-if __name__ == '__main__':
-    main()
