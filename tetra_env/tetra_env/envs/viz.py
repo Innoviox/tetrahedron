@@ -3,6 +3,7 @@ from numpy import array
 from math import cos, sin
 from itertools import combinations
 from rubix import Tetra, Color, Dir
+from pygame import K_q, K_w, K_a, K_s, K_z, K_x
 
 ######################
 #                    #
@@ -68,15 +69,35 @@ colors = {'Red': (255, 0, 0),
           }
 
 class Paint:
-    def __init__(self, shape, keys_handler):
+    def __init__(self, shape):
         self.__shape = shape
-        self.__keys_handler = keys_handler
+
+        self.dragging = False
+        self.last_x, self.last_y = 0, 0
+        counter_clockwise = 0.05  # radians
+        clockwise = -counter_clockwise
+        self.params = {
+            K_q: (X, clockwise),
+            K_w: (X, counter_clockwise),
+            K_a: (Y, clockwise),
+            K_s: (Y, counter_clockwise),
+            K_z: (Z, clockwise),
+            K_x: (Z, counter_clockwise),
+        }
+        
+        # self.__keys_handler = keys_handler
         self.__size = 450, 450
         self.__clock = pygame.time.Clock()
         self.__screen = pygame.display.set_mode(self.__size)
         self.__mainloop()
 
-        self.dragging = False
+        
+
+    def keys_handler(self, keys):
+        for key in self.params:
+            if keys[key]:
+                self.__shape.rotate(*self.params[key])
+
 
     def __fit(self, vec):
         """
@@ -86,20 +107,26 @@ class Paint:
         return [round(70 * coordinate + frame / 2) for coordinate, frame in zip(vec, self.__size)]
 
     def __handle_events(self):
-        if not hasattr(self, "dragging"): self.dragging = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
-##            elif event.type == pygame.MOUSEBUTTONDOWN:
-##                self.dragging = True
-##            elif event.type == pygame.MOUSEBUTTONUP:
-##                self.dragging = False
-##            elif event.type == pygame.MOUSEMOTION and self.dragging:
-##                mouse_x, mouse_y = event.pos
-##                self.__shape.shift[0] += mouse_x / 200
-##                self.__shape.shift[1] += mouse_y / 200
-##                
-        self.__keys_handler(pygame.key.get_pressed())
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.dragging = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.dragging = False
+            elif event.type == pygame.MOUSEMOTION and self.dragging:
+                mouse_x, mouse_y = event.pos
+                mouse_x -= self.last_x
+                mouse_y -= self.last_y
+                self.last_x, self.last_y = event.pos
+
+                if mouse_x != 0:
+                    # print(mouse_x)
+                    self.__shape.rotate(Y, 0.05 if mouse_y < 0 else -0.05)
+                if mouse_y != 0:
+                    # print(mouse_y)
+                    self.__shape.rotate(X, 0.05 if mouse_x < 0 else -0.05)
+        self.keys_handler(pygame.key.get_pressed())
 
     def __draw_shape(self, thickness=4):
         sides = list(map(list, self.__shape.faces))
@@ -139,7 +166,6 @@ class Paint:
 ######################
 
 
-from pygame import K_q, K_w, K_a, K_s, K_z, K_x
 
 vertices = []
 faces = []
@@ -161,25 +187,10 @@ def render(tetra):
         faces=faces,
         tetra=tetra
     )
-
-    counter_clockwise = 0.05  # radians
-    clockwise = -counter_clockwise
-
-    params = {
-        K_q: (X, clockwise),
-        K_w: (X, counter_clockwise),
-        K_a: (Y, clockwise),
-        K_s: (Y, counter_clockwise),
-        K_z: (Z, clockwise),
-        K_x: (Z, counter_clockwise),
-    }
-
-    def keys_handler(keys):
-        for key in params:
-            if keys[key]:
-                cube.rotate(*params[key])
-
+    
     pygame.init()
     pygame.display.set_caption('Control -   q,w : X    a,s : Y    z,x : Z')
-    Paint(cube, keys_handler)
+    Paint(cube)
+
+render(Tetra())
 
