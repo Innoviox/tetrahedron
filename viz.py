@@ -101,12 +101,20 @@ class Paint:
 def main():
     from pygame import K_q, K_w, K_a, K_s, K_z, K_x
 
+    vertices = []
+    edges = []
+    for i in open("tetra.txt"):
+        if i.startswith("#"): continue
+        if i.startswith("v"):
+            _, a, b, c = i.split()
+            vertices.append([int(a), int(b), int(c)])
+        elif i.startswith("e"):
+            _, a, b = i.split()
+            edges.append({int(a), int(b)})
 
-    cube = Physical(  # 0         1            2            3           4            5            6            7
-        vertices=((1, 1, 1), (1, 1, -1), (1, -1, 1), (1, -1, -1), (-1, 1, 1), (-1, 1, -1), (-1, -1, 1), (-1, -1, -1)),
-        edges=({0, 1}, {0, 2}, {2, 3}, {1, 3},
-               {4, 5}, {4, 6}, {6, 7}, {5, 7},
-               {0, 4}, {1, 5}, {2, 6}, {3, 7})
+    cube = Physical(
+        vertices=vertices,
+        edges=edges
     )
 
     counter_clockwise = 0.05  # radians
