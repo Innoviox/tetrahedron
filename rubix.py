@@ -31,3 +31,4 @@ class Tetra():
             x = [self.pieces[j][k].name[0] for (j, k) in x]
             s += side.format(*x)
         return s
+
