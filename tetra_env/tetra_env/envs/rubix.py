@@ -34,6 +34,16 @@ class Tetra():
         for i in range(n):
             self.move(choice(list(Color)), randint(0, 1), choice([Dir.LEFT, Dir.RIGHT]))
 
+    def cronkin(self):
+        self.move(Color.GREEN, 1, Dir.RIGHT)
+        self.move(Color.YELLOW, 1, Dir.RIGHT)
+        self.move(Color.GREEN, 1, Dir.LEFT)
+        self.move(Color.YELLOW, 1, Dir.LEFT)
+        self.move(Color.GREEN, 1, Dir.LEFT)
+        self.move(Color.RED, 1, Dir.LEFT)
+        self.move(Color.GREEN, 1, Dir.RIGHT)
+        self.move(Color.RED, 1, Dir.RIGHT)
+
     def to_space(self):
         box = np.zeros((4, 9))
         for c in Color:

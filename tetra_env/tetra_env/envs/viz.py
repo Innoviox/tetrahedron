@@ -89,7 +89,7 @@ class Paint:
         self.__size = 800, 800
         self.__clock = pygame.time.Clock()
         self.__screen = pygame.display.set_mode(self.__size)
-        self.__mainloop()
+        self.tick()
 
         
 
@@ -150,8 +150,7 @@ class Paint:
                 c += i[2]
         return (a / len(side), b / len(side), c / len(side))
 
-    def __mainloop(self):
-        # while True:
+    def tick(self):
         self.__handle_events()
         self.__screen.fill(BLACK)
         self.__draw_shape()
@@ -181,16 +180,25 @@ for i in open("tetra_env/tetra_env/envs/tetra.txt"):
         _, a, b, c, d, e = i.split()
         faces[-1].append([int(a), int(b), int(c), int(d), int(e)])
 
-def render(tetra):
-    cube = Physical(
+t = Tetra()
+t.cronkin()
+
+cube = Physical(
         vertices=vertices,
         faces=faces,
-        tetra=tetra
+        tetra=t
     )
     
-    pygame.init()
-    pygame.display.set_caption('Control -   q,w : X    a,s : Y    z,x : Z')
-    Paint(cube)
+pygame.init()
+pygame.display.set_caption('Control -   q,w : X    a,s : Y    z,x : Z')
 
+engine = Paint(cube)
+
+def render(tetra):
+    cube.tetra = tetra
+
+if __name__=='__main__':
+    while 1:
+        engine.tick()
 # render(Tetra())
 

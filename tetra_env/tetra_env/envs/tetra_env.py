@@ -1,7 +1,7 @@
 import gym
 from gym import error, spaces, utils
 from gym.utils import seeding
-from .viz import render, Tetra, Color, Dir
+from .viz import render, Tetra, Color, Dir, engine
 
 actions = {
     0: (Color.RED, 0, Dir.LEFT),
@@ -30,16 +30,30 @@ class TetraEnv(gym.Env):
         self.action_space = spaces.Discrete(16)
         self.observation_space = spaces.Box(low=0, high=3, shape=(4, 9))
         self.viz_set_up = False
+        self.memory = []
+        self.memory_length = 2
 
     def step(self, action):  # action is number from 1-16
         self.tetra.move(*actions[action])
 
+        info = {}
+        
         s = self.tetra.score()
-        return self.tetra.to_space(), s, s>0.9, {} 
+
+        if action in self.memory:
+            s /= 2 # punish repeat actions
+            info['punished'] = True
+        
+        if len(self.memory) == self.memory_length:
+            self.memory.pop(0)
+        self.memory.append(action)
+        
+        return self.tetra.to_space(), s, s>0.99, info
 
     def reset(self):
         self.tetra = Tetra()
-        self.tetra.random(50)
+        # self.tetra.random(50)
+        self.tetra.cronkin()
         return self.tetra.to_space()
 
     def render(self, mode='human', close=False):
@@ -47,4 +61,5 @@ class TetraEnv(gym.Env):
         print(round(self.tetra.score(), 2))
         if mode == 'human':
             render(self.tetra)
+            engine.tick()
                 
