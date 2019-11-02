@@ -103,49 +103,18 @@ class Tetra():
             rot.rotate(direction.value)
             new = [self.pieces[i] for i in rot]
             for k, (i, j) in enumerate(zip(arr, new)):
-                if len(j) == 2:
-                    if revmap[move][corners[move.value - 1][k]][direction]:
+                if revmap[move][corners[move.value - 1][k]][direction]:
                         j.reverse()
-##                j.reverse()
-##                ## no idea why the following rules are necessary but they are
-##                if direction == Dir.LEFT:
-##                    if move == Color.BLUE:
-##                        j.reverse()
-##                    elif move in j and move.next(direction) in j:
-##                        j.reverse()
-##                elif direction == Dir.RIGHT:
-##                    if move == Color.YELLOW:
-##                        if (move in j and move.next(direction) in j):
-##                            j.reverse()
-##                    elif move == Color.BLUE:
-##                        j.reverse()
-##                    elif move not in j:
-##                        j.reverse() 
-                # print("setting", i, j)
                 self.pieces[i] = j
 
     def __str__(self):
-        # return ''.join(side.format(*[self.pieces[j][k].name[0] for (j, k) in [sides[c][i] for i in order[c.value - 1]]]) for c in Color)
+        return ''.join(side.format(*[self.pieces[j][k].name[0] for (j, k) in [sides[c][i] for i in order[c.value - 1]]]) for c in Color)
         s = ""
         for c in Color:
-            # print(c, sides[c])
             o = order[c.value - 1]
-            # x = sorted(enumerate(sides[c]), key=lambda i: order[c.value - 1][i[0]])
-            # x = [sides[c][o[i]] for i in range(len(sides[c]))]
             x = [sides[c][i] for i in o]
-            # print(x)
-            # print(self.pieces[5])
-            # print([[i.name[0] for i in self.pieces[j]] for (j, k) in x])
             x = [self.pieces[j][k].name[0] for (j, k) in x]
-            # print(x)
             s += side.format(*x)
-            # print(c, x)
-            # s = sides[c][order[i]]
-            # for i, (piece, color) in enumerate(sides[c]):
-            #     s = ""
-                # s += {0: "  ", 1: " "}.get(i, "")
-                # s += self.pieces[piece][color].name[0]
-                # s += {0: "  \n", 3: " \n", 8: "\n"}.get(i, "")
         return s
         
 def test():
@@ -260,6 +229,14 @@ test()
 def corkin_1():
     t = Tetra()
 
+    t.move(Color.GREEN, 1, Dir.RIGHT)
+    t.move(Color.YELLOW, 1, Dir.RIGHT)
+    t.move(Color.GREEN, 1, Dir.LEFT)
+    t.move(Color.YELLOW, 1, Dir.LEFT)
+    t.move(Color.GREEN, 1, Dir.LEFT)
+    t.move(Color.RED, 1, Dir.LEFT)
+    t.move(Color.GREEN, 1, Dir.RIGHT)
+    t.move(Color.RED, 1, Dir.RIGHT)
     t.move(Color.GREEN, 1, Dir.RIGHT)
     t.move(Color.YELLOW, 1, Dir.RIGHT)
     t.move(Color.GREEN, 1, Dir.LEFT)
