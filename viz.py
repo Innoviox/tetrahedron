@@ -36,6 +36,7 @@ class Physical:
         self.__vertices = array(vertices)
         self.__faces = tuple(faces)
         self.__rotation = [0, 0, 0]  # radians around each axis
+        self.shift = array([0, 0, 0])
 
     def rotate(self, axis, θ):
         self.__rotation[axis] += θ
@@ -43,6 +44,7 @@ class Physical:
     @property
     def faces(self):
         location = self.__vertices.dot(rotation_matrix(*self.__rotation))  # an index->location mapping
+        location = list(map(self.shift.__add__, location))
         for side in self.__faces:
             yield ((location[v1], location[v2], location[v3], fill) for v1, v2, v3, fill in side)
 
@@ -70,6 +72,8 @@ class Paint:
         self.__screen = pygame.display.set_mode(self.__size)
         self.__mainloop()
 
+        self.dragging = False
+
     def __fit(self, vec):
         """
         ignore the z-element (creating a very cheap projection), and scale x, y to the coordinates of the screen
@@ -78,9 +82,19 @@ class Paint:
         return [round(70 * coordinate + frame / 2) for coordinate, frame in zip(vec, self.__size)]
 
     def __handle_events(self):
+        if not hasattr(self, "dragging"): self.dragging = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
+##            elif event.type == pygame.MOUSEBUTTONDOWN:
+##                self.dragging = True
+##            elif event.type == pygame.MOUSEBUTTONUP:
+##                self.dragging = False
+##            elif event.type == pygame.MOUSEMOTION and self.dragging:
+##                mouse_x, mouse_y = event.pos
+##                self.__shape.shift[0] += mouse_x / 200
+##                self.__shape.shift[1] += mouse_y / 200
+##                
         self.__keys_handler(pygame.key.get_pressed())
 
     def __draw_shape(self, thickness=4):
