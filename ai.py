@@ -9,8 +9,10 @@ from rl.agents.dqn import DQNAgent
 from rl.policy import BoltzmannQPolicy
 from rl.memory import SequentialMemory
 
+import tetra_env
 
-ENV_NAME = 'CartPole-v0'
+
+ENV_NAME = 'tetra-v0'
 
 
 # Get the environment and extract the number of actions.

@@ -1,4 +1,4 @@
-from constants import *
+from .constants import *
 from copy import deepcopy
 from random import choice, randint
 

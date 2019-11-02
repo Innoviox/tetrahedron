@@ -1,14 +1,14 @@
 import gym
 from gym import error, spaces, utils
 from gym.utils import seeding
-from rubix import *
-import viz
+from .rubix import *
+from .viz import render
 
 class FooEnv(gym.Env):
     metadata = {'render.modes': ['human', 'none']}
 
     def __init__(self):
-        self.tetra = Tetra()
+        self.reset()
         self.action_space = spaces.Discrete(16)
         self.viz_set_up = False
 
@@ -25,6 +25,7 @@ class FooEnv(gym.Env):
 
     def reset(self):
         self.tetra = Tetra()
+        self.tetra.random(50)
         return self.tetra
 
     def render(self, mode='human', close=False):
@@ -32,5 +33,5 @@ class FooEnv(gym.Env):
         if mode == 'none':
             return
         else:
-            viz.render(self.tetra)
+            render(self.tetra)
                 
