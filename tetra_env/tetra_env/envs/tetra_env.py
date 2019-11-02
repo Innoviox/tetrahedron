@@ -31,7 +31,7 @@ class TetraEnv(gym.Env):
         self.observation_space = spaces.Box(low=0, high=3, shape=(4, 9))
         self.viz_set_up = False
         self.memory = []
-        self.memory_length = 2
+        self.memory_length = 3
 
     def step(self, action):  # action is number from 1-16
         self.tetra.move(*actions[action])
@@ -41,8 +41,8 @@ class TetraEnv(gym.Env):
         s = self.tetra.score()
 
         if action in self.memory:
-            s /= 2 # punish repeat actions
-            info['punished'] = True
+            s /= 20 # ABSOLUTELY NO punish repeat actions
+            info['warn'] = 'punished'
         
         if len(self.memory) == self.memory_length:
             self.memory.pop(0)
@@ -52,8 +52,7 @@ class TetraEnv(gym.Env):
 
     def reset(self):
         self.tetra = Tetra()
-        # self.tetra.random(50)
-        self.tetra.cronkin()
+        self.tetra.random(20)
         return self.tetra.to_space()
 
     def render(self, mode='human', close=False):
