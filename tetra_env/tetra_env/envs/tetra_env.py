@@ -32,7 +32,6 @@ class TetraEnv(gym.Env):
         self.viz_set_up = False
 
     def step(self, action):  # action is number from 1-16
-        # print("stepping", action)
         self.tetra.move(*actions[action])
 
         s = self.tetra.score()
