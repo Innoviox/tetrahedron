@@ -3,11 +3,29 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 from .viz import render, Tetra, Color, Dir
 
+actions = {
+    0: (Color.RED, 0, Dir.LEFT),
+    1: (Color.RED, 1, Dir.LEFT),
+    2: (Color.RED, 0, Dir.RIGHT),
+    3: (Color.RED, 1, Dir.RIGHT),
+    4: (Color.BLUE, 0, Dir.LEFT),
+    5: (Color.BLUE, 1, Dir.LEFT),
+    6: (Color.BLUE, 0, Dir.RIGHT),
+    7: (Color.BLUE, 1, Dir.RIGHT),
+    8: (Color.YELLOW, 0, Dir.LEFT),
+    9: (Color.YELLOW, 1, Dir.LEFT),
+    10: (Color.YELLOW, 0, Dir.RIGHT),
+    11: (Color.YELLOW, 1, Dir.RIGHT),
+    12: (Color.GREEN, 0, Dir.LEFT),
+    13: (Color.GREEN, 1, Dir.LEFT),
+    14: (Color.GREEN, 0, Dir.RIGHT),
+    15: (Color.GREEN, 1, Dir.RIGHT),
+    }
+
 class TetraEnv(gym.Env):
     metadata = {'render.modes': ['human', 'none']}
 
     def __init__(self):
-        print("HI")
         self.reset()
         self.action_space = spaces.Discrete(16)
         self.observation_space = spaces.Box(low=0, high=3, shape=(4, 9))
@@ -15,33 +33,10 @@ class TetraEnv(gym.Env):
 
     def step(self, action):  # action is number from 1-16
         # print("stepping", action)
-        n = bin(action)[2:]
-        try:
-            *act, level, direc = n
-        except ValueError:
-            act = ''
-            level = ''
-            direc = ''
-        
-        if act:
-            act = Color._value2member_map_[int(''.join(act), 2)]
-        else:
-            act = Color.RED
-
-        if level:
-            level = int(level)
-        else:
-            level = 0
-
-        if direc:
-            direc = Dir.LEFT if direc == '0' else Dir.RIGHT
-        else:
-            direc = Dir.LEFT
-        
-        self.tetra.move(act, level, direc)
+        self.tetra.move(*actions[action])
 
         s = self.tetra.score()
-        return self.tetra.to_space(), s, s==1, {} 
+        return self.tetra.to_space(), s, s>0.9, {} 
 
     def reset(self):
         self.tetra = Tetra()
