@@ -19,6 +19,7 @@ class Color(Enum):
 class Dir(Enum):
     LEFT  = 1 # also UP
     RIGHT = -1 # also DOWN
+    TOP   = 0 # only used for expressing corner orientations
 
 pieces = {
      0: [Color.RED, Color.GREEN, Color.YELLOW],
@@ -50,10 +51,35 @@ order = [[0, 3, 2, 1, 8, 7, 6, 5, 4],
          [0, 3, 2, 1, 8, 7, 6, 5, 4],
          [0, 1, 8, 5, 2, 6, 3, 7, 4],
          [0, 1, 3, 2, 4, 8, 7, 6, 5]]
-move_arr = [[[0],  [[1, 3, 5],    [2, 4, 6]]],
-            [[11], [[10, 12, 19], [3, 13, 9]]],
-            [[15], [[16, 14, 20], [5, 13, 17]]],
-            [[7],  [[8, 18, 21],  [1, 17, 9]]]]
+move_arr = [[[0],  [[1, 3, 5],    [2, 4, 6]]],  # rlt
+            [[11], [[10, 12, 19], [3, 13, 9]]], # rtl
+            [[15], [[16, 14, 20], [5, 13, 17]]],# rlt
+            [[7],  [[8, 18, 21],  [1, 17, 9]]]] # ltr
+corners = [[Dir.RIGHT, Dir.LEFT, Dir.TOP],
+           [Dir.RIGHT, Dir.TOP, Dir.LEFT],
+           [Dir.RIGHT, Dir.LEFT, Dir.TOP],
+           [Dir.LEFT, Dir.TOP, Dir.RIGHT]]
+revmap = {Color.RED: {
+                        Dir.TOP: {Dir.RIGHT: True, Dir.LEFT: False},
+                        Dir.LEFT: {Dir.RIGHT: False, Dir.LEFT: True},
+                        Dir.RIGHT: {Dir.RIGHT: True, Dir.LEFT: True}
+                     },
+          Color.GREEN: {
+                        Dir.TOP: {Dir.RIGHT: False, Dir.LEFT: True},
+                        Dir.LEFT: {Dir.RIGHT: True, Dir.LEFT: False},
+                        Dir.RIGHT: {Dir.RIGHT: True, Dir.LEFT: True}
+                       },
+          Color.BLUE: {
+                        Dir.TOP: {Dir.RIGHT: False, Dir.LEFT: False},
+                        Dir.LEFT: {Dir.RIGHT: False, Dir.LEFT: False},
+                        Dir.RIGHT: {Dir.RIGHT: False, Dir.LEFT: False}
+                       },
+          Color.YELLOW: {
+                        Dir.TOP: {Dir.RIGHT: True, Dir.LEFT: False},
+                        Dir.LEFT: {Dir.RIGHT: False, Dir.LEFT: True},
+                        Dir.RIGHT: {Dir.RIGHT: True, Dir.LEFT: True}
+                       }
+         }
 sides = {i: [] for i in Color}
 for n, colors in pieces.items():
     for i, c in enumerate(colors):
@@ -77,25 +103,29 @@ class Tetra():
             rot.rotate(direction.value)
             new = [self.pieces[i] for i in rot]
             for k, (i, j) in enumerate(zip(arr, new)):
-                j.reverse()
-                ## no idea why the following rules are necessary but they are
-                if direction == Dir.LEFT:
-                    if move == Color.BLUE:
+                if len(j) == 2:
+                    if revmap[move][corners[move.value - 1][k]][direction]:
                         j.reverse()
-                    elif move in j and move.next(direction) in j:
-                        j.reverse()
-                elif direction == Dir.RIGHT:
-                    if move == Color.YELLOW:
-                        if (move in j and move.next(direction) in j):
-                            j.reverse()
-                    elif move == Color.BLUE:
-                        j.reverse()
-                    elif move not in j:
-                        j.reverse() 
+##                j.reverse()
+##                ## no idea why the following rules are necessary but they are
+##                if direction == Dir.LEFT:
+##                    if move == Color.BLUE:
+##                        j.reverse()
+##                    elif move in j and move.next(direction) in j:
+##                        j.reverse()
+##                elif direction == Dir.RIGHT:
+##                    if move == Color.YELLOW:
+##                        if (move in j and move.next(direction) in j):
+##                            j.reverse()
+##                    elif move == Color.BLUE:
+##                        j.reverse()
+##                    elif move not in j:
+##                        j.reverse() 
                 # print("setting", i, j)
                 self.pieces[i] = j
 
     def __str__(self):
+        # return ''.join(side.format(*[self.pieces[j][k].name[0] for (j, k) in [sides[c][i] for i in order[c.value - 1]]]) for c in Color)
         s = ""
         for c in Color:
             # print(c, sides[c])
@@ -211,14 +241,19 @@ BBYYY
 YYGGG"""}}
     for c in Color:
         for d in Dir:
+            if d is Dir.TOP: continue
             t = Tetra()
             t.move(c, 1, d)
             if c not in strs: continue
             if d not in strs[c]: continue
+            
             if ''.join(str(t).strip().split()) == ''.join(strs[c][d].strip().split()):
                 print(f"passed test {c} {d}")
             else:
                 print(f"failed test {c} {d}")
+                print(t)
+                return
+                # print(strs[c][d])
 
 test()
 
