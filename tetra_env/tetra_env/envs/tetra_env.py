@@ -40,7 +40,8 @@ class TetraEnv(gym.Env):
         s = self.tetra.score()
 
         if action in self.memory:
-            s /= 20 # ABSOLUTELY NO punish repeat actions
+            # s /= 20 # ABSOLUTELY NO punish repeat actions
+            s = -s # type 3 punishment
         
         if len(self.memory) == self.memory_length:
             self.memory.pop(0)
