@@ -15,7 +15,7 @@ class Tetra():
             return
         self.move(move, 0, direction)
         
-        for arr in affected:
+        for arr in affected[1:]:
             rot = deque(arr)
             rot.rotate(direction.value)
             new = [self.pieces[i] for i in rot]

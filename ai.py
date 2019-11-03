@@ -10,7 +10,7 @@ from rl.policy import *
 from rl.memory import SequentialMemory
 
 import tetra_env
-
+from tetra_env import viz
 
 ENV_NAME = 'tetra-v0'
 
