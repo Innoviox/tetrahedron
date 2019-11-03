@@ -23,9 +23,10 @@ nb_actions = env.action_space.n
 print(env.action_space, nb_actions)
 print(env.observation_space)
 
+mem_length = 4
 # Next, we build a very simple model.
 model = Sequential()
-model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
+model.add(Flatten(input_shape=(mem_length,) + env.observation_space.shape))
 model.add(Dense(16))
 model.add(Activation('relu'))
 model.add(Dense(16))
@@ -38,7 +39,7 @@ model.summary()
 
 # Finally, we configure and compile our agent. You can use every built-in Keras optimizer and
 # even the metrics!
-memory = SequentialMemory(limit=500000, window_length=1)
+memory = SequentialMemory(limit=50000, window_length=mem_length)
 policy = MaxBoltzmannQPolicy()
 dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=50,
                target_model_update=1e-2, policy=policy)
