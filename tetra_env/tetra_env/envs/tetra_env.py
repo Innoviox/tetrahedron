@@ -61,12 +61,12 @@ class TetraEnv(gym.Env):
 
         self.last_reward = round(s, 3)
         done = s >= self.threshold
-        # int(done)        
+        s = int(done)
         return self.tetra.to_space(), s, done, {}
 
     def reset(self):
         self.tetra = Tetra()
-        self.tetra.random(20)
+        self.tetra.random(5)
         return self.tetra.to_space()
 
     def render(self, mode='human', close=False):

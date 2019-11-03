@@ -5,9 +5,11 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.optimizers import Adam
 
-from rl.agents.dqn import DQNAgent
+from rl.agents.cem import CEMAgent
 from rl.policy import *
-from rl.memory import SequentialMemory, EpisodeParameterMemory
+from rl.memory import *
+from rl.agents import SARSAAgent
+
 
 import tetra_env
 from tetra_env import viz
@@ -39,21 +41,18 @@ model.summary()
 
 # Finally, we configure and compile our agent. You can use every built-in Keras optimizer and
 # even the metrics!
-# memory = EpisodeParameterMemory(limit=1000, window_length=mem_length) # SequentialMemory(limit=50000, window_length=mem_length)
-memory = SequentialMemory(limit=50000, window_length=mem_length)
-policy = MaxBoltzmannQPolicy()
-dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=2000,
-               train_interval=50, target_model_update=1e-2, policy=policy)
-dqn.compile(Adam(lr=1e-3), metrics=['mae'])
+# SARSA does not require a memory.
+policy = BoltzmannQPolicy()
+sarsa = SARSAAgent(model=model, nb_actions=nb_actions, nb_steps_warmup=10, policy=policy)
+sarsa.compile(Adam(lr=1e-3), metrics=['mae'])
 
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
-dqn.fit(env, nb_steps=500000, visualize=False, verbose=1)
+sarsa.fit(env, nb_steps=50000, visualize=False, verbose=1)
 
 # After training is done, we save the final weights.
-dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
-# dqn.load_weights('dqn_{}_weights.h5f'.format(ENV_NAME))
+sarsa.save_weights('sarsa_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
 
 # Finally, evaluate our algorithm for 5 episodes.
-dqn.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=20)
+sarsa.test(env, nb_episodes=5, visualize=True)
