@@ -33,23 +33,25 @@ class TetraEnv(gym.Env):
         self.memory = []
         self.memory_length = 3
         self.last_reward = 0
+        self.threshold = 0.8
 
     def step(self, action):  # action is number from 1-16
         self.tetra.move(*actions[action])
         
         s = self.tetra.score()
 
-        if action in self.memory:
+        # if action in self.memory:
             # s /= 20 # ABSOLUTELY NO punish repeat actions
-            s = -s # type 3 punishment
+            # s = -s # type 3 punishment
         
-        if len(self.memory) == self.memory_length:
-            self.memory.pop(0)
-        self.memory.append(action)
+        # if len(self.memory) == self.memory_length:
+        #     self.memory.pop(0)
+        # self.memory.append(action)
 
         self.last_reward = round(s, 3)
+        done = s >= self.threshold
         
-        return self.tetra.to_space(), s, s>0.99, {}
+        return self.tetra.to_space(), int(done), done, {}
 
     def reset(self):
         self.tetra = Tetra()
