@@ -33,6 +33,8 @@ model.add(Dense(64))
 model.add(Activation('relu'))
 model.add(Dense(64))
 model.add(Activation('relu'))
+model.add(Dense(64))
+model.add(Activation('relu'))
 model.add(Dense(nb_actions))
 model.add(Activation('linear'))
 model.summary()
@@ -43,7 +45,7 @@ model.summary()
 memory = SequentialMemory(limit=50000, window_length=mem_length)
 policy = MaxBoltzmannQPolicy()
 dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=2000,
-               train_interval=50, target_model_update=1e-2, policy=policy)
+               train_interval=50, target_model_update=1e-2, policy=policy, enable_dueling_network=True)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
 # Okay, now it's time to learn something! We visualize the training here for show, but this
