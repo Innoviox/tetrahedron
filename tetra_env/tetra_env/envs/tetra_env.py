@@ -20,53 +20,45 @@ actions = {
     13: (Color.GREEN, 1, Dir.LEFT),
     14: (Color.GREEN, 0, Dir.RIGHT),
     15: (Color.GREEN, 1, Dir.RIGHT),
-    }
+}
 
-actions = {
-    0: (Color.RED, 1, Dir.LEFT),
-    1: (Color.RED, 1, Dir.RIGHT),
-    2: (Color.BLUE, 1, Dir.LEFT),
-    3: (Color.BLUE, 1, Dir.RIGHT),
-    4: (Color.YELLOW, 1, Dir.LEFT),
-    5: (Color.YELLOW, 1, Dir.RIGHT),
-    6: (Color.GREEN, 1, Dir.LEFT),
-    7: (Color.GREEN, 1, Dir.RIGHT),
-    }
+# actions = {
+#     0: (Color.RED, 1, Dir.LEFT),
+#     1: (Color.RED, 1, Dir.RIGHT),
+#     2: (Color.BLUE, 1, Dir.LEFT),
+#     3: (Color.BLUE, 1, Dir.RIGHT),
+#     4: (Color.YELLOW, 1, Dir.LEFT),
+#     5: (Color.YELLOW, 1, Dir.RIGHT),
+#     6: (Color.GREEN, 1, Dir.LEFT),
+#     7: (Color.GREEN, 1, Dir.RIGHT),
+#     }
 
 class TetraEnv(gym.Env):
     metadata = {'render.modes': ['human', 'none']}
 
     def __init__(self):
         self.reset()
-        self.action_space = spaces.Discrete(8)
+        self.action_space = spaces.Discrete(len(list(actions.keys())))
         self.observation_space = spaces.Box(low=0, high=3, shape=(4, 9))
         self.viz_set_up = False
         self.memory = []
         self.memory_length = 3
         self.last_reward = 0
-        self.threshold = 0.8
+        self.threshold = 0.6
 
     def step(self, action):  # action is number from 1-16
         self.tetra.move(*actions[action])
         
         s = self.tetra.score()
 
-        # if action in self.memory:
-            # s /= 20 # ABSOLUTELY NO punish repeat actions
-            # s = -s # type 3 punishment
-        
-        # if len(self.memory) == self.memory_length:
-        #     self.memory.pop(0)
-        # self.memory.append(action)
-
         self.last_reward = round(s, 3)
         done = s >= self.threshold
-        s = int(done)
+        # s = int(done)
         return self.tetra.to_space(), s, done, {}
 
     def reset(self):
         self.tetra = Tetra()
-        self.tetra.random(5)
+        self.tetra.random(n=10)
         return self.tetra.to_space()
 
     def render(self, mode='human', close=False):
