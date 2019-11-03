@@ -8,14 +8,15 @@ class Tetra():
     def __init__(self):
         self.pieces = deepcopy(pieces)
 
-    def move(self, move: Color, level: int, direction: Dir):
+    def move(self, move: Color, level: int, direction: Dir, out=False):
+        if out: print("moving", move, level, direction)
         affected = move_arr[move.value - 1][level]
         if level == 0:
             self.pieces[affected[0]].rotate(direction.value)
             return
         self.move(move, 0, direction)
         
-        for arr in affected[1:]:
+        for arr in affected:
             rot = deque(arr)
             rot.rotate(direction.value)
             new = [self.pieces[i] for i in rot]
@@ -30,9 +31,9 @@ class Tetra():
             n += sum(1 for k, l in zip(j, self.pieces[i]) if k == l)
         return n / 36 # 36 is max
 
-    def random(self, n):
+    def random(self, n=1, out=False):
         for i in range(n):
-            self.move(choice(list(Color)), randint(0, 1), choice([Dir.LEFT, Dir.RIGHT]))
+            self.move(choice(list(Color)), randint(0, 1), choice([Dir.LEFT, Dir.RIGHT]), out=out)
 
     def cronkin(self):
         self.move(Color.GREEN, 1, Dir.RIGHT)

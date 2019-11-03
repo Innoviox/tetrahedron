@@ -1,4 +1,4 @@
-from rubix import *
+from .rubix import *
 
 def test():
     strs = {
