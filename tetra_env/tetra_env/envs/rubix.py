@@ -33,7 +33,8 @@ class Tetra():
 
     def random(self, n=1, out=False):
         for i in range(n):
-            self.move(choice(list(Color)), randint(0, 1), choice([Dir.LEFT, Dir.RIGHT]), out=out)
+            # randint(0, 1)
+            self.move(choice(list(Color)), 1, choice([Dir.LEFT, Dir.RIGHT]), out=out)
 
     def cronkin(self):
         self.move(Color.GREEN, 1, Dir.RIGHT)

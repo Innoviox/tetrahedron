@@ -22,12 +22,23 @@ actions = {
     15: (Color.GREEN, 1, Dir.RIGHT),
     }
 
+actions = {
+    0: (Color.RED, 1, Dir.LEFT),
+    1: (Color.RED, 1, Dir.RIGHT),
+    2: (Color.BLUE, 1, Dir.LEFT),
+    3: (Color.BLUE, 1, Dir.RIGHT),
+    4: (Color.YELLOW, 1, Dir.LEFT),
+    5: (Color.YELLOW, 1, Dir.RIGHT),
+    6: (Color.GREEN, 1, Dir.LEFT),
+    7: (Color.GREEN, 1, Dir.RIGHT),
+    }
+
 class TetraEnv(gym.Env):
     metadata = {'render.modes': ['human', 'none']}
 
     def __init__(self):
         self.reset()
-        self.action_space = spaces.Discrete(16)
+        self.action_space = spaces.Discrete(8)
         self.observation_space = spaces.Box(low=0, high=3, shape=(4, 9))
         self.viz_set_up = False
         self.memory = []
@@ -50,8 +61,8 @@ class TetraEnv(gym.Env):
 
         self.last_reward = round(s, 3)
         done = s >= self.threshold
-        
-        return self.tetra.to_space(), int(done), done, {}
+        # int(done)        
+        return self.tetra.to_space(), s, done, {}
 
     def reset(self):
         self.tetra = Tetra()
