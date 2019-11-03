@@ -32,6 +32,7 @@ class TetraEnv(gym.Env):
         self.viz_set_up = False
         self.memory = []
         self.memory_length = 3
+        self.last_reward = 0
 
     def step(self, action):  # action is number from 1-16
         self.tetra.move(*actions[action])
@@ -44,6 +45,8 @@ class TetraEnv(gym.Env):
         if len(self.memory) == self.memory_length:
             self.memory.pop(0)
         self.memory.append(action)
+
+        self.last_reward = round(s, 3)
         
         return self.tetra.to_space(), s, s>0.99, {}
 
@@ -54,7 +57,7 @@ class TetraEnv(gym.Env):
 
     def render(self, mode='human', close=False):
         assert mode in TetraEnv.metadata['render.modes']
-        print(round(self.tetra.score(), 2))
+        print(self.last_reward)
         if mode == 'human':
             render(self.tetra)
             engine.tick()

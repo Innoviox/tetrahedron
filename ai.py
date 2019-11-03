@@ -39,7 +39,7 @@ model.summary()
 # Finally, we configure and compile our agent. You can use every built-in Keras optimizer and
 # even the metrics!
 memory = SequentialMemory(limit=500000, window_length=1)
-policy = MaxBoltzmannQPolicy()
+policy = EpsGreedyQPolicy()
 dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=50,
                target_model_update=1e-2, policy=policy)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
@@ -54,4 +54,4 @@ dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
 # dqn.load_weights('dqn_{}_weights.h5f'.format(ENV_NAME))
 
 # Finally, evaluate our algorithm for 5 episodes.
-dqn.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=100)
+dqn.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=20)
