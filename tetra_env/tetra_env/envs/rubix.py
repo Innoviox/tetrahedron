@@ -22,6 +22,8 @@ actions = {
     14: (Color.GREEN, 0, Dir.RIGHT),
     15: (Color.GREEN, 1, Dir.RIGHT),
 }
+# 5, 6
+
 
 class Tetra():
     def __init__(self):
@@ -34,7 +36,7 @@ class Tetra():
             self.pieces[affected[0]].rotate(direction.value)
             return
         self.move(move, 0, direction)
-        
+
         for arr in affected:
             rot = deque(arr)
             rot.rotate(direction.value)
@@ -48,7 +50,7 @@ class Tetra():
         n = 0
         for i, j in pieces.items():
             n += sum(1 for k, l in zip(j, self.pieces[i]) if k == l)
-        return n / 36 # 36 is max
+        return n / 36  # 36 is max
 
     def random(self, n=1, out=False):
         for i in range(n):
@@ -84,30 +86,70 @@ class Tetra():
             s += side.format(*x)
         return s
 
-    @classmethod 
+    @classmethod
     def of(cls, other):
         t = cls()
         t.pieces = deepcopy(other.pieces)
         return t
- 
+
     def copy(self):
         return Tetra.of(self)
- 
+
     def is_solved(self):
         return self.score() == 1
- 
+
     def step(self, act):
         t = self.copy()
         t.move(*act)
         return t
- 
-    def solve(self):
+
+    def solve_dfs(self):
         def advance(curr_tetra, curr_algo):
+            print(curr_algo)
+            input(curr_tetra.is_solved())
             if len(curr_algo) > 12 or curr_tetra.is_solved():
                 return curr_algo
- 
-           advances = [advance(curr_tetra.step(j), curr_algo+[i]) for i, j in actions.items()]
-           return min(advances, key=len)
+
+            advances = [advance(curr_tetra.step(j), curr_algo + [i]) for i, j in actions.items()]
+            return min(advances, key=len)
+
         return advance(self, [])
- 
- 
+
+
+    # def solve_bfs(self):
+    #     def advance(curr_tetra, curr_algo):
+    #         print(curr_algo)
+    #         input()
+    #         if len(curr_algo) > 12:
+    #             return curr_algo
+    #
+    #         for i, j in actions.items():
+    #             print("a")
+    #             next = curr_tetra.step(j)
+    #             if next.is_solved():
+    #                 return curr_algo + [i]
+    #
+    #         for i, j in actions.items():
+    #             print("b")
+    #             next = curr_tetra.step(j)
+    #             adv = advance(next, curr_algo + [i])
+    #             if len(adv) <= 12:
+    #                 return adv
+    #
+    #         print("nothign found? wyh")
+    #
+    #     return advance(self, [])
+
+    def solve_bfs(self):
+        nodes = [[]]
+        while nodes:
+            path = nodes.pop(0)
+
+            v = Tetra.of(self)
+            for p in path: v.move(*actions[p])
+
+
+            if v.is_solved():
+                return path
+            for i in actions:
+                nodes.append(path + [i])
