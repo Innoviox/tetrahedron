@@ -113,8 +113,6 @@ class Tetra():
 
     def solve_dfs(self):
         def advance(curr_tetra, curr_algo):
-            print(curr_algo)
-            input(curr_tetra.is_solved())
             if len(curr_algo) > 12 or curr_tetra.is_solved():
                 return curr_algo
 
@@ -149,11 +147,11 @@ class Tetra():
     #     return advance(self, [])
 
     def solve_bfs(self):
-        nodes = [[]]
+        nodes = deque([[]])
         visited = []
         last_len = 0
         while nodes:
-            path = nodes.pop(0)
+            path = nodes.popleft()
 
             if len(path) != last_len:
                 print(last_len)

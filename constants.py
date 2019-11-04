@@ -1,21 +1,46 @@
 from enum import Enum
 from collections import deque
 
-class Color(Enum):
-    RED    = 1 # TOP
-    GREEN  = 2 # LEFT
-    BLUE   = 3 # BACK
-    YELLOW = 4 # RIGHT
+# class Color(Enum):
+#     RED    = 1 # TOP
+#     GREEN  = 2 # LEFT
+#     BLUE   = 3 # BACK
+#     YELLOW = 4 # RIGHT
+#
+#     def next(self, direction):
+#         d = int(0.5 * direction.value + 0.5) # -1 -> 0, 1 -> 1
+#         return [[Color.YELLOW, Color.GREEN], [Color.RED, Color.BLUE],
+#                 [Color.YELLOW, Color.GREEN], [Color.BLUE, Color.RED]][self.value - 1][d]
+#
+class B:
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+class _A:
+    def __init__(self):
+        self.index = 0
 
-    def next(self, direction):
-        d = int(0.5 * direction.value + 0.5) # -1 -> 0, 1 -> 1
-        return [[Color.YELLOW, Color.GREEN], [Color.RED, Color.BLUE],
-                [Color.YELLOW, Color.GREEN], [Color.BLUE, Color.RED]][self.value - 1][d]
-    
-class Dir(Enum):
-    LEFT  = 1 # also UP
-    RIGHT = -1 # also DOWN
-    TOP   = 0 # only used for expressing corner orientations
+    def __iter__(self):
+        return iter(self.klist)
+
+
+Color = _A()
+Color.RED = B('RED', 1)
+Color.GREEN = B('GREEN', 2)
+Color.BLUE = B('BLUE', 3)
+Color.YELLOW = B('YELLOW', 4)
+Color.klist = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW]
+
+Dir = _A()
+Dir.LEFT = B('LEFT', 1)
+Dir.RIGHT = B('RIGHT', -1)
+Dir.TOP = B('TOP', 0)
+Dir.klist = [Dir.LEFT, Dir.RIGHT, Dir.TOP]
+
+# class Dir(Enum):
+#     LEFT  = 1 # also UP
+#     RIGHT = -1 # also DOWN
+#     TOP   = 0 # only used for expressing corner orientations
 
 pieces = {
      0: [Color.RED, Color.GREEN, Color.YELLOW],
