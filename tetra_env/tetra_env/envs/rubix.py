@@ -3,23 +3,24 @@ from copy import deepcopy
 from random import choice, randint
 from gym import spaces
 import numpy as np
+from tqdm import tqdm
 
 actions = {
-    0: (Color.RED, 0, Dir.LEFT),
+    # 0: (Color.RED, 0, Dir.LEFT),
     1: (Color.RED, 1, Dir.LEFT),
-    2: (Color.RED, 0, Dir.RIGHT),
+    # 2: (Color.RED, 0, Dir.RIGHT),
     3: (Color.RED, 1, Dir.RIGHT),
-    4: (Color.BLUE, 0, Dir.LEFT),
+    # 4: (Color.BLUE, 0, Dir.LEFT),
     5: (Color.BLUE, 1, Dir.LEFT),
-    6: (Color.BLUE, 0, Dir.RIGHT),
+    # 6: (Color.BLUE, 0, Dir.RIGHT),
     7: (Color.BLUE, 1, Dir.RIGHT),
-    8: (Color.YELLOW, 0, Dir.LEFT),
+    # 8: (Color.YELLOW, 0, Dir.LEFT),
     9: (Color.YELLOW, 1, Dir.LEFT),
-    10: (Color.YELLOW, 0, Dir.RIGHT),
+    # 10: (Color.YELLOW, 0, Dir.RIGHT),
     11: (Color.YELLOW, 1, Dir.RIGHT),
-    12: (Color.GREEN, 0, Dir.LEFT),
+    # 12: (Color.GREEN, 0, Dir.LEFT),
     13: (Color.GREEN, 1, Dir.LEFT),
-    14: (Color.GREEN, 0, Dir.RIGHT),
+    # 14: (Color.GREEN, 0, Dir.RIGHT),
     15: (Color.GREEN, 1, Dir.RIGHT),
 }
 # 5, 6
@@ -54,7 +55,8 @@ class Tetra():
 
     def random(self, n=1, out=False):
         for i in range(n):
-            self.move(choice(list(Color)), randint(0, 1), choice([Dir.LEFT, Dir.RIGHT]), out=out)
+            n = randint(0, 1) if len(list(actions.keys())) == 16 else 1
+            self.move(choice(list(Color)), n, choice([Dir.LEFT, Dir.RIGHT]), out=out)
 
     def cronkin(self):
         self.move(Color.GREEN, 1, Dir.RIGHT)
@@ -142,14 +144,21 @@ class Tetra():
 
     def solve_bfs(self):
         nodes = [[]]
+        visited = []
+        t = tqdm(total=1000000)
         while nodes:
             path = nodes.pop(0)
 
             v = Tetra.of(self)
             for p in path: v.move(*actions[p])
 
-
             if v.is_solved():
                 return path
+
             for i in actions:
-                nodes.append(path + [i])
+                p = path + [i]
+                # if p not in visited:
+                nodes.append(p)
+                    # visited.append(p)
+            t.update(1)
+        t.close()

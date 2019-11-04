@@ -6,9 +6,27 @@ t = Tetra()
 # t.move(*actions[2])
 # t.move(*actions[0])
 
-t.random(n=20, out=True)
+t.random(n=500, out=True)
 
-print(t.solve_bfs())
+viz.render(t)
+
+x = t.solve_bfs()
+
+print(x)
+
+n = 0
+while 1:
+    flag = True
+    while flag:
+        try:
+            viz.engine.tick()
+        except KeyboardInterrupt:
+            if input() != 'n':
+                flag = False
+            else:
+                exit()
+    t.move(*actions[x[n]])
+    n += 1
 
 def viz_test():
     t = viz.Tetra()
