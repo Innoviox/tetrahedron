@@ -25,10 +25,12 @@ actions = {
 }
 # 5, 6
 
+color_conv = {'R': Color.RED, 'G': Color.GREEN, 'Y': Color.YELLOW, 'B': Color.BLUE}
+
 
 class Tetra():
-    def __init__(self):
-        self.pieces = deepcopy(pieces)
+    def __init__(self, start=True):
+        if start: self.pieces = deepcopy(pieces)
 
     def move(self, move: Color, level: int, direction: Dir, out=False):
         if out: print("moving", move, level, direction)
@@ -88,10 +90,13 @@ class Tetra():
             s += side.format(*x)
         return s
 
+    # def to_readable_string(self):
+    #     return ','.join(''.join(k.name[0] for k in j) for j in self.pieces.values())
+
     @classmethod
     def of(cls, other):
-        t = cls()
-        t.pieces = deepcopy(other.pieces)
+        t = cls(start=False)
+        t.pieces = {a: i.copy() for a, i in other.pieces.items()}
         return t
 
     def copy(self):
