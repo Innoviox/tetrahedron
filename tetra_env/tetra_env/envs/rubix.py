@@ -4,6 +4,25 @@ from random import choice, randint
 from gym import spaces
 import numpy as np
 
+actions = {
+    0: (Color.RED, 0, Dir.LEFT),
+    1: (Color.RED, 1, Dir.LEFT),
+    2: (Color.RED, 0, Dir.RIGHT),
+    3: (Color.RED, 1, Dir.RIGHT),
+    4: (Color.BLUE, 0, Dir.LEFT),
+    5: (Color.BLUE, 1, Dir.LEFT),
+    6: (Color.BLUE, 0, Dir.RIGHT),
+    7: (Color.BLUE, 1, Dir.RIGHT),
+    8: (Color.YELLOW, 0, Dir.LEFT),
+    9: (Color.YELLOW, 1, Dir.LEFT),
+    10: (Color.YELLOW, 0, Dir.RIGHT),
+    11: (Color.YELLOW, 1, Dir.RIGHT),
+    12: (Color.GREEN, 0, Dir.LEFT),
+    13: (Color.GREEN, 1, Dir.LEFT),
+    14: (Color.GREEN, 0, Dir.RIGHT),
+    15: (Color.GREEN, 1, Dir.RIGHT),
+}
+
 class Tetra():
     def __init__(self):
         self.pieces = deepcopy(pieces)
