@@ -12,7 +12,11 @@ My attempts proved unsuccessful because my networks are not smart.
 
 keras-rl dqn
 
+​	modifying: memory size, memory window length, policy
+
 dennybritz dqn
+
+​	modifying: 
 
 ## Attempted Environment Settings
 
