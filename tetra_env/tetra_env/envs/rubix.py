@@ -65,3 +65,30 @@ class Tetra():
             s += side.format(*x)
         return s
 
+    @classmethod 
+    def of(cls, other):
+        t = cls()
+        t.pieces = deepcopy(other.pieces)
+        return t
+ 
+    def copy(self):
+        return Tetra.of(self)
+ 
+    def is_solved(self):
+        return self.score() == 1
+ 
+    def step(self, act):
+        t = self.copy()
+        t.move(*act)
+        return t
+ 
+    def solve(self):
+        def advance(curr_tetra, curr_algo):
+            if len(curr_algo) > 12 or curr_tetra.is_solved():
+                return curr_algo
+ 
+           advances = [advance(curr_tetra.step(j), curr_algo+[i]) for i, j in actions.items()]
+           return min(advances, key=len)
+        return advance(self, [])
+ 
+ 
