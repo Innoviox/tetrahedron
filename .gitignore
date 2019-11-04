@@ -1,2 +1,11 @@
 __pycache__/
 .idea
+experiments
+experiments/tetra-v0/checkpoints/model.data-00000-of-00001
+experiments/tetra-v0/checkpoints/model.index
+experiments/tetra-v0/checkpoints/model.meta
+experiments/tetra-v0/summaries_q/events.out.tfevents.1572835389.SarahLesMacBook.home
+experiments/tetra-v0/checkpoints/model.data-00000-of-00001
+experiments/tetra-v0/checkpoints/model.index
+experiments/tetra-v0/checkpoints/model.meta
+experiments/tetra-v0/summaries_q/events.out.tfevents.1572835389.SarahLesMacBook.home

@@ -6,3 +6,5 @@ register(
 )
 
 from .envs import viz
+from .envs.constants import *
+from .envs.rubix import *
