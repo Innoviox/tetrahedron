@@ -44,7 +44,7 @@ class TetraEnv(gym.Env):
         self.memory = []
         self.memory_length = 3
         self.last_reward = 0
-        self.threshold = 0.6
+        self.threshold = 0.8
 
     def step(self, action):  # action is number from 1-16
         self.tetra.move(*actions[action])
@@ -53,7 +53,7 @@ class TetraEnv(gym.Env):
 
         self.last_reward = round(s, 3)
         done = s >= self.threshold
-        # s = int(done)
+        s = int(done)
         return self.tetra.to_space(), s, done, {}
 
     def reset(self):

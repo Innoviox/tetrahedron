@@ -1,0 +1,2 @@
+model_checkpoint_path: "/Users/chervjay/Documents/GitHub/tetrahedron/experiments/tetra-v0/checkpoints/model"
+all_model_checkpoint_paths: "/Users/chervjay/Documents/GitHub/tetrahedron/experiments/tetra-v0/checkpoints/model"
