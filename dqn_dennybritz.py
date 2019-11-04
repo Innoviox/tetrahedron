@@ -19,6 +19,8 @@ env = gym.envs.make(ENV_NAME)
 # Atari Actions: 0 (noop), 1 (fire), 2 (left) and 3 (right) are valid actions
 VALID_ACTIONS = list(range(env.action_space.n))
 
+state_shape =(4, 9) #  [210, 160, 3]
+
 class StateProcessor():
     """
     Processes a raw Atari images. Resizes it and converts it to grayscale.
@@ -26,12 +28,13 @@ class StateProcessor():
     def __init__(self):
         # Build the Tensorflow graph
         with tf.variable_scope("state_processor"):
-            self.input_state = tf.placeholder(shape=[210, 160, 3], dtype=tf.uint8)
-            self.output = tf.image.rgb_to_grayscale(self.input_state)
-            self.output = tf.image.crop_to_bounding_box(self.output, 34, 0, 160, 160)
-            self.output = tf.image.resize_images(
-                self.output, [84, 84], method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-            self.output = tf.squeeze(self.output)
+            self.input_state = tf.placeholder(shape=state_shape, dtype=tf.uint8)
+            self.output = self.input_state
+            # self.output = tf.image.rgb_to_grayscale(self.input_state)
+            # self.output = tf.image.crop_to_bounding_box(self.output, 34, 0, 160, 160)
+            # self.output = tf.image.resize_images(
+            #     self.output, [84, 84], method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+            # self.output = tf.squeeze(self.output)
 
     def process(self, sess, state):
         """
@@ -70,7 +73,7 @@ class Estimator():
 
         # Placeholders for our input
         # Our input are 4 RGB frames of shape 160, 160 each
-        self.X_pl = tf.placeholder(shape=[None, 84, 84, 4], dtype=tf.uint8, name="X")
+        self.X_pl = tf.placeholder(shape=[None, 4, 9 , 4], dtype=tf.uint8, name="X")
         # The TD target value
         self.y_pl = tf.placeholder(shape=[None], dtype=tf.float32, name="y")
         # Integer id of which action was selected
