@@ -161,10 +161,6 @@ class Tetra():
         while nodes:
             path = nodes.popleft()
 
-            if len(path) != last_len:
-                print(last_len, time.time() - t)
-                last_len += 1
-
             v = cache.move(path)
             if v.is_solved():
                 return path
