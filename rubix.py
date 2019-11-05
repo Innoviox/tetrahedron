@@ -4,6 +4,7 @@ from random import choice, randint
 from gym import spaces
 import numpy as np
 from tqdm import tqdm
+import time
 
 actions = {
     # 0: (Color.RED, 0, Dir.LEFT),
@@ -147,26 +148,35 @@ class Tetra():
     #     return advance(self, [])
 
     def solve_bfs(self):
-        nodes = deque([[]])
-        visited = []
+        nodes = deque([()])
+        cache = MoveCache(self)
+
         last_len = 0
+        t = time.time()
+
         while nodes:
             path = nodes.popleft()
 
             if len(path) != last_len:
-                print(last_len)
+                print(last_len, time.time() - t)
                 last_len += 1
 
-            v = Tetra.of(self)
-            for p in path: v.move(*actions[p])
-
+            v = cache.move(path)
             if v.is_solved():
                 return path
 
-            for i in actions:
-                p = path + [i]
-                # if p not in visited:
-                nodes.append(p)
-                    # visited.append(p)
-            # t.update(1)
-        # t.close()
+            nodes.extend([path + (i,) for i in actions])
+
+class MoveCache():
+    def __init__(self, t):
+        self.tetra = t
+        self.cache = {None: t}
+
+    def move(self, action):
+        curr_cache = self.cache
+        for i in action:
+            if i not in curr_cache:
+                curr_cache[i] = {None: curr_cache[None].step(actions[i])}
+            curr_cache = curr_cache[i]
+        return curr_cache[None]
+
