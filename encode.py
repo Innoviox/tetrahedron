@@ -7,7 +7,7 @@ with open("data", "wb") as f:
     for i in trange(10000):
         try:
             t = Tetra()
-            t.random(n=5)
+            t.random(n=3)
 
             spaces.append(t.to_space())
             solves.append(t.solve_bfs())
