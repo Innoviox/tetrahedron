@@ -7,40 +7,64 @@ from collections import deque
 #     BLUE   = 3 # BACK
 #     YELLOW = 4 # RIGHT
 #
-#     def next(self, direction):
-#         d = int(0.5 * direction.value + 0.5) # -1 -> 0, 1 -> 1
-#         return [[Color.YELLOW, Color.GREEN], [Color.RED, Color.BLUE],
-#                 [Color.YELLOW, Color.GREEN], [Color.BLUE, Color.RED]][self.value - 1][d]
 #
-class B:
-    def __init__(self, name, value):
-        self.name = name
-        self.value = value
-class _A:
-    def __init__(self):
-        self.index = 0
-
-    def __iter__(self):
-        return iter(self.klist)
-
-
-Color = _A()
-Color.RED = B('RED', 1)
-Color.GREEN = B('GREEN', 2)
-Color.BLUE = B('BLUE', 3)
-Color.YELLOW = B('YELLOW', 4)
-Color.klist = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW]
-
-Dir = _A()
-Dir.LEFT = B('LEFT', 1)
-Dir.RIGHT = B('RIGHT', -1)
-Dir.TOP = B('TOP', 0)
-Dir.klist = [Dir.LEFT, Dir.RIGHT, Dir.TOP]
-
 # class Dir(Enum):
 #     LEFT  = 1 # also UP
 #     RIGHT = -1 # also DOWN
 #     TOP   = 0 # only used for expressing corner orientations
+
+class MyEnumMeta(type):
+    def __iter__(self):
+        for i in dir(self):
+            if i[0].isupper():
+                yield getattr(self, i)
+
+class EnumMember:
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+    def __repr__(self):
+        print("hi")
+        return f"<{self.name}: {self.value}>"
+
+class MyEnum(metaclass=MyEnumMeta):
+    def __init__(self, **names):
+        for n, idx in names.items():
+            setattr(self, n, EnumMember(n, idx))
+
+Color = MyEnum(RED=1, GREEN=2, BLUE=3, YELLOW=4)
+Dir = MyEnum(LEFT=1, RIGHT=-1, TOP=0)
+
+print(list(Color))
+print(Color.RED)
+print("hi i have been imported")
+
+
+# class B:
+#     def __init__(self, name, value):
+#         self.name = name
+#         self.value = value
+# class _A:
+#     def __init__(self):
+#         self.index = 0
+#
+#     def __iter__(self):
+#         return iter(self.klist)
+#
+#
+# Color = _A()
+# Color.RED = B('RED', 1)
+# Color.GREEN = B('GREEN', 2)
+# Color.BLUE = B('BLUE', 3)
+# Color.YELLOW = B('YELLOW', 4)
+# Color.klist = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW]
+#
+# Dir = _A()
+# Dir.LEFT = B('LEFT', 1)
+# Dir.RIGHT = B('RIGHT', -1)
+# Dir.TOP = B('TOP', 0)
+# Dir.klist = [Dir.LEFT, Dir.RIGHT, Dir.TOP]
 
 pieces = {
      0: [Color.RED, Color.GREEN, Color.YELLOW],
