@@ -129,7 +129,7 @@ class Tetra():
     #     return advance(self, [])
 
     def solve_bfs(self):
-        nodes = deque([(i,) for i in actions.keys()])
+        nodes = deque([(i,) for i in actions])
         cache = MoveCache(self)
 
         while nodes:
@@ -138,7 +138,8 @@ class Tetra():
             if cache.move(path).is_solved():
                 return path
 
-            nodes.extend([path + (i,) for i in actions if i != antithetic[path[-1]]])
+            nodes.extend([path + (i,) for i in actions
+                          if not path or (i != path[-1] and i != antithetic[path[-1]])])
 
 
 
