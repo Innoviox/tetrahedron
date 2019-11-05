@@ -13,6 +13,8 @@ from collections import deque
 #     RIGHT = -1 # also DOWN
 #     TOP   = 0 # only used for expressing corner orientations
 
+import functools
+
 class EnumMember:
     HASH = 0
     def __init__(self, name, value):
@@ -109,3 +111,23 @@ for n, colors in pieces.items():
     for i, c in enumerate(colors):
         sides[c].append([n, i])
 side = "  {0}  \n {1}{2}{3} \n{4}{5}{6}{7}{8}\n"
+
+actions = {
+    # 0: (Color.RED, 0, Dir.LEFT),
+    1: (Color.RED, 1, Dir.LEFT),
+    # 2: (Color.RED, 0, Dir.RIGHT),
+    3: (Color.RED, 1, Dir.RIGHT),
+    # 4: (Color.BLUE, 0, Dir.LEFT),
+    5: (Color.BLUE, 1, Dir.LEFT),
+    # 6: (Color.BLUE, 0, Dir.RIGHT),
+    7: (Color.BLUE, 1, Dir.RIGHT),
+    # 8: (Color.YELLOW, 0, Dir.LEFT),
+    9: (Color.YELLOW, 1, Dir.LEFT),
+    # 10: (Color.YELLOW, 0, Dir.RIGHT),
+    11: (Color.YELLOW, 1, Dir.RIGHT),
+    # 12: (Color.GREEN, 0, Dir.LEFT),
+    13: (Color.GREEN, 1, Dir.LEFT),
+    # 14: (Color.GREEN, 0, Dir.RIGHT),
+    15: (Color.GREEN, 1, Dir.RIGHT),
+}
+# 5, 6

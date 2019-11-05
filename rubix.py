@@ -5,25 +5,7 @@ import numpy as np
 from tqdm import tqdm, trange
 import time
 
-actions = {
-    # 0: (Color.RED, 0, Dir.LEFT),
-    1: (Color.RED, 1, Dir.LEFT),
-    # 2: (Color.RED, 0, Dir.RIGHT),
-    3: (Color.RED, 1, Dir.RIGHT),
-    # 4: (Color.BLUE, 0, Dir.LEFT),
-    5: (Color.BLUE, 1, Dir.LEFT),
-    # 6: (Color.BLUE, 0, Dir.RIGHT),
-    7: (Color.BLUE, 1, Dir.RIGHT),
-    # 8: (Color.YELLOW, 0, Dir.LEFT),
-    9: (Color.YELLOW, 1, Dir.LEFT),
-    # 10: (Color.YELLOW, 0, Dir.RIGHT),
-    11: (Color.YELLOW, 1, Dir.RIGHT),
-    # 12: (Color.GREEN, 0, Dir.LEFT),
-    13: (Color.GREEN, 1, Dir.LEFT),
-    # 14: (Color.GREEN, 0, Dir.RIGHT),
-    15: (Color.GREEN, 1, Dir.RIGHT),
-}
-# 5, 6
+
 
 color_conv = {'R': Color.RED, 'G': Color.GREEN, 'Y': Color.YELLOW, 'B': Color.BLUE}
 
@@ -39,16 +21,14 @@ class Tetra():
 
     def move(self, move: Color, level: int, direction: Dir, out=False):
         if out: print("moving", move, level, direction)
-        affected = move_arr[move.value - 1][level]
-        if level == 0:
-            s = self.pieces[affected[0]]
-            self.pieces[affected[0]] = self.rot(s, direction)
-            return
-        self.move(move, 0, direction)
+        aff0, affected = move_arr[move.value - 1]
+        s = self.pieces[aff0[0]]
+        self.pieces[aff0[0]] = self.rot(s, direction)
+        # self.move(move, 0, direction)
+        if level == 0: return
 
         for arr in affected:
-            rot = self.rot(arr, direction)
-            new = [self.pieces[i] for i in rot]
+            new = self.rot([self.pieces[i] for i in arr], direction)
             for k, (i, j) in enumerate(zip(arr, new)):
                 if revmap[move][corners[move.value - 1][k]][direction]:
                     j = j[::-1]

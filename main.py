@@ -1,4 +1,4 @@
-viz = False
+viz = True
 if viz: import viz
 from rubix import Tetra, actions, time
 
@@ -24,6 +24,9 @@ if viz: viz.render(t)
 
 ti = time.time()
 x = t.solve_bfs()
+
+
+
 print(time.time() - ti)
 
 print(x)
