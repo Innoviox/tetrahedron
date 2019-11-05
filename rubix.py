@@ -2,7 +2,7 @@ from constants import *
 from copy import deepcopy
 from random import choice, randint
 import numpy as np
-from tqdm import tqdm
+from tqdm import tqdm, trange
 import time
 
 actions = {
@@ -157,14 +157,18 @@ class Tetra():
         last_len = 0
         t = time.time()
 
+        bar = trange(12)
+
         while nodes:
             path = nodes.popleft()
-
-            v = cache.move(path)
-            if v.is_solved():
+            
+            if cache.move(path).is_solved():
                 return path
 
             nodes.extend([path + (i,) for i in actions])
+
+            bar.n = bar.last_print_n = len(path)
+            bar.update()
 
 class MoveCache():
     def __init__(self, t):

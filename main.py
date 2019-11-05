@@ -11,13 +11,14 @@ from rubix import Tetra, actions, time
 # def b():
 #     c = Tetra.of(t)
 # print(timeit.timeit(a, number=1000), timeit.timeit(b, number=1000))
+
 import tests
 
 t = Tetra()
 
 # t.move(*actions[2])
 # t.move(*actions[0])
-t.random(n=6, out=True)
+t.random(n=10, out=True)
 
 if viz: viz.render(t)
 
