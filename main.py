@@ -4,19 +4,16 @@ from rubix import Tetra, actions
 
 import tests
 
-tests.corkin_1()
-
 t = Tetra()
 
 # t.move(*actions[2])
 # t.move(*actions[0])
-
 t.random(n=6, out=True)
 
 # viz.render(t)
 
 x = t.solve_bfs()
-#
+
 print(x)
 #
 # n = 0

@@ -13,58 +13,33 @@ from collections import deque
 #     RIGHT = -1 # also DOWN
 #     TOP   = 0 # only used for expressing corner orientations
 
-class MyEnumMeta(type):
-    def __iter__(self):
-        for i in dir(self):
-            if i[0].isupper():
-                yield getattr(self, i)
-
 class EnumMember:
     def __init__(self, name, value):
         self.name = name
         self.value = value
 
     def __repr__(self):
-        print("hi")
         return f"<{self.name}: {self.value}>"
 
-class MyEnum(metaclass=MyEnumMeta):
+    def __eq__(self, other):
+        return self.value == other.value
+
+    def __hash__(self):
+        return self.value*len(self.name)
+
+class MyEnum():
     def __init__(self, **names):
+        self.__list = []
         for n, idx in names.items():
-            setattr(self, n, EnumMember(n, idx))
+            em = EnumMember(n, idx)
+            self.__list.append(em)
+            setattr(self, n, em)
 
-Color = MyEnum(RED=1, GREEN=2, BLUE=3, YELLOW=4)
-Dir = MyEnum(LEFT=1, RIGHT=-1, TOP=0)
+    def __iter__(self):
+        return iter(self.__list)
 
-print(list(Color))
-print(Color.RED)
-print("hi i have been imported")
-
-
-# class B:
-#     def __init__(self, name, value):
-#         self.name = name
-#         self.value = value
-# class _A:
-#     def __init__(self):
-#         self.index = 0
-#
-#     def __iter__(self):
-#         return iter(self.klist)
-#
-#
-# Color = _A()
-# Color.RED = B('RED', 1)
-# Color.GREEN = B('GREEN', 2)
-# Color.BLUE = B('BLUE', 3)
-# Color.YELLOW = B('YELLOW', 4)
-# Color.klist = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW]
-#
-# Dir = _A()
-# Dir.LEFT = B('LEFT', 1)
-# Dir.RIGHT = B('RIGHT', -1)
-# Dir.TOP = B('TOP', 0)
-# Dir.klist = [Dir.LEFT, Dir.RIGHT, Dir.TOP]
+Color = MyEnum(RED=1, GREEN=2, BLUE=3, YELLOW=4) # hash: 3, 10, 12, 24
+Dir = MyEnum(LEFT=1, RIGHT=-1, TOP=0) # hash: 4, -5, 0
 
 pieces = {
      0: [Color.RED, Color.GREEN, Color.YELLOW],
