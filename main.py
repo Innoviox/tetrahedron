@@ -18,7 +18,7 @@ t = Tetra()
 
 # t.move(*actions[2])
 # t.move(*actions[0])
-t.random(n=10, out=True)
+t.random(n=20, out=True)
 
 if viz: viz.render(t)
 

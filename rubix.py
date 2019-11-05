@@ -140,7 +140,7 @@ class Tetra():
 
             nodes.extend([path + (i,) for i in actions
                           if not path or (i != path[-1] and i != antithetic[path[-1]])])
-
+ 
 
 
 class MoveCache():
