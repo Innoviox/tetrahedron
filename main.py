@@ -15,12 +15,24 @@ from rubix import Tetra, actions, time
 import tests
 
 t = Tetra()
-
+if viz: viz.render(t)
 # t.move(*actions[2])
 # t.move(*actions[0])
-t.random(n=20, out=True)
+##for i in range(20):
+##    flag = True
+##    t.random(n=1, out=True)
+##    while flag:
+##        try:
+##            viz.engine.tick()
+##        except KeyboardInterrupt:
+##            if input() != 'n':
+##                flag = False
+##            else:
+##                exit()
 
-if viz: viz.render(t)
+# t.move(*actions[1], out=True)
+
+t.random(n=10, out=True)
 
 ti = time.time()
 x = t.solve_bfs()

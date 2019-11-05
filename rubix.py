@@ -129,7 +129,7 @@ class Tetra():
     #     return advance(self, [])
 
     def solve_bfs(self):
-        nodes = deque([(i,) for i in actions])
+        nodes = deque([()])
         cache = MoveCache(self)
 
         while nodes:
