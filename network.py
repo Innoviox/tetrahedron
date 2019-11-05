@@ -8,10 +8,11 @@ import numpy as np
 import pickle
 
 spaces, solves = pickle.load(open("datac", "rb"))
-train_x, test_x = spaces[:40000], spaces[40000:]
-train_y, test_y = solves[:40000], solves[40000:]
+n = 50000
+train_x, test_x = spaces[:n], spaces[n:]
+train_y, test_y = solves[:n], solves[n:]
 
-
+print(train_x[5], train_y[5])
 
 model = Sequential()
 # model.add(Flatten(input_shape=(4, 9)))
@@ -27,8 +28,21 @@ model.summary()
 
 model.compile(Adam(lr=1e-3), loss='mse', metrics=['accuracy'])
 
-model.fit(train_x, train_y, epochs=50, batch_size=32)
+# model.fit(train_x, train_y, epochs=50)
+# model.save('my_model.h5')
 
-model.save('my_model.h5') 
+model.load_weights('my_model.h5')
 
-print(model.evaluate(test_x, test_y))
+# print(model.evaluate(test_x, test_y))
+
+from rubix import Tetra
+
+for i in range(5):
+    t = Tetra()
+    t.random(n=3, out=True)
+    s = t.to_space().flatten()
+    print(s, s.shape)
+    m = model.predict(np.array([s]))[0]
+
+    print([round(i * 20) - 1 for i in m])
+    print(t.solve_bfs())

@@ -10,7 +10,7 @@ solves = []
 for i in _solves:
     solves.append(np.zeros(12))
     for a, b in enumerate(i):
-        solves[-1][a] = b + 1
+        solves[-1][a] = (b + 1) / 20
 
 solves = np.array(solves)
 
