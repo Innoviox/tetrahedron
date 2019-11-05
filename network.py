@@ -3,9 +3,11 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.optimizers import Adam
 
+import numpy as np
+
 import pickle
 
-spaces, solves = pickle.load(open("data", "rb"))
+spaces, solves = pickle.load(open("datac", "rb"))
 train_x, test_x = spaces[:40000], spaces[40000:]
 train_y, test_y = solves[:40000], solves[40000:]
 
@@ -23,6 +25,8 @@ model.summary()
 
 model.compile(Adam(lr=1e-3), loss='mse', metrics=['accuracy'])
 
-model.fit(train_x, train_y)
+model.fit(train_x[0], train_y, epochs=50, batch_size=32)
+
+model.save('my_model.h5') 
 
 print(model.evaluate(test_x, test_y))
