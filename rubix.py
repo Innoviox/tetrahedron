@@ -4,7 +4,7 @@ from random import choice, randint
 import numpy as np
 from tqdm import tqdm, trange
 import time
-
+import heapq
 
 
 color_conv = {'R': Color.RED, 'G': Color.GREEN, 'Y': Color.YELLOW, 'B': Color.BLUE}
@@ -18,15 +18,12 @@ class Tetra():
     def __init__(self, start=True):
         if start: self.pieces = deepcopy(pieces)
 
-    
-
     def move(self, move: Color, level: int, direction: Dir, out=False):
         if out: print("moving", move, level, direction)
         
         aff0, affected = move_arr[move.value - 1]
 
-        s = self.pieces[aff0[0]]
-        self.pieces[aff0[0]] = rot(s, direction)
+        self.pieces[aff0[0]] = rot(self.pieces[aff0[0]], direction)
         if level == 0: return
 
         for arr in affected:
@@ -132,24 +129,18 @@ class Tetra():
     #     return advance(self, [])
 
     def solve_bfs(self):
-        nodes = deque([()])
+        nodes = deque([(i,) for i in actions.keys()])
         cache = MoveCache(self)
-
-        last_len = 0
-        t = time.time()
-
-        bar = trange(12)
 
         while nodes:
             path = nodes.popleft()
-            
+
             if cache.move(path).is_solved():
                 return path
 
-            nodes.extend([path + (i,) for i in actions])
+            nodes.extend([path + (i,) for i in actions if i != antithetic[path[-1]]])
 
-            bar.n = bar.last_print_n = len(path)
-            bar.update()
+
 
 class MoveCache():
     def __init__(self, t):

@@ -131,3 +131,4 @@ actions = {
     15: (Color.GREEN, 1, Dir.RIGHT),
 }
 # 5, 6
+antithetic = {1: 3, 3: 1, 5: 7, 7: 5, 9: 11, 11: 9, 13: 15, 15: 13}
