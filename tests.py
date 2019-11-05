@@ -91,8 +91,8 @@ BBYYY
   Y  
  YYG 
 YYGGG"""}}
-    for c in Color:
-        for d in Dir:
+    for c in range(1, 5):
+        for d in [1, -1]:
             if d is Dir.TOP: continue
             t = Tetra()
             t.move(c, 1, d)

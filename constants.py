@@ -13,37 +13,49 @@ from collections import deque
 #     RIGHT = -1 # also DOWN
 #     TOP   = 0 # only used for expressing corner orientations
 
-class EnumMember:
-    HASH = 0
-    def __init__(self, name, value):
-        self.name = name
-        self.value = value
-        self.l = len(self.name)
-        self.hash = EnumMember.HASH
-        EnumMember.HASH += 1
+# class EnumMember:
+#     HASH = 0
+#     def __init__(self, name, value):
+#         self.name = name
+#         self.value = value
+#         self.l = len(self.name)
+#         self.hash = EnumMember.HASH
+#         EnumMember.HASH += 1
+#
+#     def __repr__(self):
+#         return f"<{self.name}: {self.value}>"
+#
+#     def __eq__(self, other):
+#         return self.value == other.value
+#
+#     def __hash__(self):
+#         return self.hash
+#
+# class MyEnum():
+#     def __init__(self, **names):
+#         self.__list = []
+#         for n, idx in names.items():
+#             em = EnumMember(n, idx)
+#             self.__list.append(em)
+#             setattr(self, n, em)
+#
+#     def __iter__(self):
+#         return iter(self.__list)
+#
+# Color = MyEnum(RED=1, GREEN=2, BLUE=3, YELLOW=4) # hash: 3, 10, 12, 24
+# Dir = MyEnum(LEFT=1, RIGHT=-1, TOP=0) # hash: 4, -5, 0
 
-    def __repr__(self):
-        return f"<{self.name}: {self.value}>"
+class Color:
+    RED = 1
+    GREEN = 2
+    BLUE = 3
+    YELLOW = 4
 
-    def __eq__(self, other):
-        return self.value == other.value
+class Dir:
+    LEFT  = 1 # also UP
+    RIGHT = -1 # also DOWN
+    TOP   = 0 # only used for expressing corner orientations
 
-    def __hash__(self):
-        return self.hash
-
-class MyEnum():
-    def __init__(self, **names):
-        self.__list = []
-        for n, idx in names.items():
-            em = EnumMember(n, idx)
-            self.__list.append(em)
-            setattr(self, n, em)
-
-    def __iter__(self):
-        return iter(self.__list)
-
-Color = MyEnum(RED=1, GREEN=2, BLUE=3, YELLOW=4) # hash: 3, 10, 12, 24
-Dir = MyEnum(LEFT=1, RIGHT=-1, TOP=0) # hash: 4, -5, 0
 
 pieces = {
      0: [Color.RED, Color.GREEN, Color.YELLOW],
@@ -104,7 +116,7 @@ revmap = {Color.RED: {
                         Dir.RIGHT: {Dir.RIGHT: True, Dir.LEFT: True}
                        }
          }
-sides = {i: [] for i in Color}
+sides = {i: [] for i in range(1, 5)}
 for n, colors in pieces.items():
     for i, c in enumerate(colors):
         sides[c].append([n, i])

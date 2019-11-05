@@ -34,13 +34,13 @@ class Tetra():
         if start: self.pieces = deepcopy(pieces)
 
     def rot(self, arr, direction):
-        if direction.value == 1:
+        if direction == 1:
             return arr[1:] + [arr[0]]
         return [arr[-1]] + arr[:-1]
 
-    def move(self, move: Color, level: int, direction: Dir, out=False):
+    def move(self, move: int, level: int, direction: int, out=False):
         if out: print("moving", move, level, direction)
-        affected = move_arr[move.value - 1][level]
+        affected = move_arr[move - 1][level]
         if level == 0:
             s = self.pieces[affected[0]]
             self.pieces[affected[0]] = self.rot(s, direction)
@@ -51,7 +51,7 @@ class Tetra():
             rot = self.rot(arr, direction)
             new = [self.pieces[i] for i in rot]
             for k, (i, j) in enumerate(zip(arr, new)):
-                if revmap[move][corners[move.value - 1][k]][direction]:
+                if revmap[move][corners[move - 1][k]][direction]:
                     j = j[::-1]
                 self.pieces[i] = j
         return self
@@ -65,7 +65,7 @@ class Tetra():
     def random(self, n=1, out=False):
         for i in range(n):
             n = randint(0, 1) if len(list(actions.keys())) == 16 else 1
-            self.move(choice(list(Color)), n, choice([Dir.LEFT, Dir.RIGHT]), out=out)
+            self.move(choice(list(range(1, 5))), n, choice([Dir.LEFT, Dir.RIGHT]), out=out)
 
     def cronkin(self):
         self.move(Color.GREEN, 1, Dir.RIGHT)
@@ -90,10 +90,10 @@ class Tetra():
     def __str__(self):
         # return ''.join(side.format(*[self.pieces[j][k].name[0] for (j, k) in [sides[c][i] for i in order[c.value - 1]]]) for c in Color)
         s = ""
-        for c in Color:
-            o = order[c.value - 1]
+        for c in range(1, 5):
+            o = order[c - 1]
             x = [sides[c][i] for i in o]
-            x = [self.pieces[j][k].name[0] for (j, k) in x]
+            x = [str(self.pieces[j][k])[0] for (j, k) in x]
             s += side.format(*x)
         return s
 
