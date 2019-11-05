@@ -33,22 +33,28 @@ class Tetra():
     def __init__(self, start=True):
         if start: self.pieces = deepcopy(pieces)
 
+    def rot(self, arr, direction):
+        if direction.value == 1:
+            return arr[1:] + [arr[0]]
+        return [arr[-1]] + arr[:-1]
+
     def move(self, move: Color, level: int, direction: Dir, out=False):
         if out: print("moving", move, level, direction)
         affected = move_arr[move.value - 1][level]
         if level == 0:
-            self.pieces[affected[0]].rotate(direction.value)
+            s = self.pieces[affected[0]]
+            self.pieces[affected[0]] = self.rot(s, direction)
             return
         self.move(move, 0, direction)
 
         for arr in affected:
-            rot = deque(arr)
-            rot.rotate(direction.value)
+            rot = self.rot(arr, direction)
             new = [self.pieces[i] for i in rot]
             for k, (i, j) in enumerate(zip(arr, new)):
                 if revmap[move][corners[move.value - 1][k]][direction]:
-                    j.reverse()
+                    j = j[::-1]
                 self.pieces[i] = j
+        return self
 
     def score(self):
         n = 0
@@ -97,7 +103,7 @@ class Tetra():
     @classmethod
     def of(cls, other):
         t = cls(start=False)
-        t.pieces = {a: i.copy() for a, i in other.pieces.items()}
+        t.pieces = {a: i[:] for a, i in other.pieces.items()}
         return t
 
     def copy(self):
@@ -108,9 +114,7 @@ class Tetra():
         # return self.score() == 1
 
     def step(self, act):
-        t = self.copy()
-        t.move(*act)
-        return t
+        return Tetra.of(self).move(*act)
 
     def solve_dfs(self):
         def advance(curr_tetra, curr_algo):

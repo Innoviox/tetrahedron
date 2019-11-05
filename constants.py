@@ -69,7 +69,7 @@ pieces = {
     20: [Color.BLUE],
     21: [Color.BLUE]
 }
-for k, v in pieces.items(): pieces[k] = deque(v)
+# for k, v in pieces.items(): pieces[k] = deque(v)
 
 order = [[0, 3, 2, 1, 8, 7, 6, 5, 4],
          [0, 3, 2, 1, 8, 7, 6, 5, 4],
