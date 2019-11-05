@@ -11,9 +11,11 @@ spaces, solves = pickle.load(open("datac", "rb"))
 train_x, test_x = spaces[:40000], spaces[40000:]
 train_y, test_y = solves[:40000], solves[40000:]
 
+
+
 model = Sequential()
-model.add(Flatten(input_shape=(4, 9)))
-model.add(Dense(16))
+# model.add(Flatten(input_shape=(4, 9)))
+model.add(Dense(16, input_shape=(36,)))
 model.add(Activation('relu'))
 model.add(Dense(16))
 model.add(Activation('relu'))
@@ -25,7 +27,7 @@ model.summary()
 
 model.compile(Adam(lr=1e-3), loss='mse', metrics=['accuracy'])
 
-model.fit(train_x[0], train_y, epochs=50, batch_size=32)
+model.fit(train_x, train_y, epochs=50, batch_size=32)
 
 model.save('my_model.h5') 
 
