@@ -33,7 +33,7 @@ class Tetra():
         if start: self.pieces = deepcopy(pieces)
 
     def rot(self, arr, direction):
-        if direction.value == 1:
+        if direction.value == -1:
             return arr[1:] + [arr[0]]
         return [arr[-1]] + arr[:-1]
 
@@ -159,10 +159,6 @@ class Tetra():
 
         while nodes:
             path = nodes.popleft()
-
-            if len(path) != last_len:
-                print(last_len, time.time() - t)
-                last_len += 1
 
             v = cache.move(path)
             if v.is_solved():
