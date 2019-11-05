@@ -14,9 +14,13 @@ from collections import deque
 #     TOP   = 0 # only used for expressing corner orientations
 
 class EnumMember:
+    HASH = 0
     def __init__(self, name, value):
         self.name = name
         self.value = value
+        self.l = len(self.name)
+        self.hash = EnumMember.HASH
+        EnumMember.HASH += 1
 
     def __repr__(self):
         return f"<{self.name}: {self.value}>"
@@ -25,7 +29,7 @@ class EnumMember:
         return self.value == other.value
 
     def __hash__(self):
-        return self.value*len(self.name)
+        return self.hash
 
 class MyEnum():
     def __init__(self, **names):
