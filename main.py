@@ -1,4 +1,4 @@
-viz = True
+viz = False
 if viz: import viz
 from rubix import Tetra, actions, time
 
@@ -16,31 +16,29 @@ import tests
 
 t = Tetra()
 if viz: viz.render(t)
-# t.move(*actions[2])
-# t.move(*actions[0])
-##for i in range(20):
-##    flag = True
-##    t.random(n=1, out=True)
-##    while flag:
-##        try:
-##            viz.engine.tick()
-##        except KeyboardInterrupt:
-##            if input() != 'n':
-##                flag = False
-##            else:
-##                exit()
 
-# t.move(*actions[1], out=True)
+"""
+moving <GREEN: 2> 1 <LEFT: 1>
+moving <RED: 1> 1 <RIGHT: -1>
+moving <GREEN: 2> 1 <RIGHT: -1>
+moving <GREEN: 2> 1 <RIGHT: -1>
+moving <GREEN: 2> 1 <LEFT: 1>
+moving <BLUE: 3> 1 <LEFT: 1>
+moving <GREEN: 2> 1 <LEFT: 1>
+moving <RED: 1> 1 <RIGHT: -1>
+moving <BLUE: 3> 1 <LEFT: 1>
+moving <GREEN: 2> 1 <LEFT: 1>
 
-t.random(n=10, out=True)
+19.428097009658813
+(15, 7, 3, 15, 3, 7, 1)
+"""
+
+for i in [13, 3, 15, 15, 13, 5, 13, 3, 5, 13]:
+    t.move(*actions[i])
 
 ti = time.time()
 x = t.solve_bfs()
-
-
-
 print(time.time() - ti)
-
 print(x)
 if viz:
     n = 0

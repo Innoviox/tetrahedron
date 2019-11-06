@@ -80,7 +80,7 @@ class Tetra():
     @classmethod
     def of(cls, other):
         t = cls(start=False)
-        t.pieces = {a: i[:] for a, i in other.pieces.items()}
+        t.pieces = other.pieces.copy()
         return t
 
     def copy(self):
@@ -140,8 +140,6 @@ class Tetra():
 
             nodes.extend([path + (i,) for i in actions
                           if not path or (i != path[-1] and i != antithetic[path[-1]])])
- 
-
 
 class MoveCache():
     def __init__(self, t):
