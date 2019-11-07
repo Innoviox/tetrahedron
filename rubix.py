@@ -21,18 +21,22 @@ class Tetra:
     def __init__(self, start=True):
         if start: self.pieces = deepcopy(pieces)
 
+
+
     def move(self, move: Color, level: int, direction: Dir, out=False):
         if out: print("moving", move, level, direction)
 
         aff0, affected = move_arr[move.value - 1]
 
-        self.pieces[aff0[0]] = rot(self.pieces[aff0[0]], direction)
+        r = revmap[move]
+
+        self.pieces[aff0] = rot(self.pieces[aff0], direction)
         if level == 0: return
 
         for arr in affected:
-            for k, (i, j) in enumerate(zip(arr, rot([self.pieces[i] for i in arr], direction))):
-                if revmap[move][corners[move.value - 1][k]][direction]:
-                    j = j[::-1] # .reverse()
+            for k, i, j in zip(corners[move.value - 1], arr, rot([self.pieces[i] for i in arr], direction)):
+                if r[k][direction]:
+                    j = j[::-1]  # .reverse()
                 self.pieces[i] = j
         return self
 

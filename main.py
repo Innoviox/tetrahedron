@@ -1,4 +1,4 @@
-viz = True
+viz = False
 if viz: import viz
 from rubix import Tetra, actions, time
 
@@ -18,7 +18,7 @@ t = Tetra()
 if viz: viz.render(t)
 
 """
-11.52667784690857
+10.32369875907898
 (15, 7, 3, 15, 3, 7, 1)
 """
 
