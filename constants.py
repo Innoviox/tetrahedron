@@ -47,29 +47,32 @@ class MyEnum():
 Color = MyEnum(RED=1, GREEN=2, BLUE=3, YELLOW=4) # hash: 3, 10, 12, 24
 Dir = MyEnum(LEFT=1, RIGHT=-1, TOP=0) # hash: 4, -5, 0
 
+Color = [1, 2, 3, 4]
+Dir = [1, -1, 0]
+
 pieces = {
-     0: [Color.RED, Color.GREEN, Color.YELLOW],
-     1: [Color.RED, Color.YELLOW],
-     2: [Color.RED],
-     3: [Color.RED, Color.GREEN],
-     4: [Color.GREEN],
-     5: [Color.GREEN, Color.YELLOW],
-     6: [Color.YELLOW],
-     7: [Color.RED, Color.YELLOW, Color.BLUE],
-     8: [Color.RED],
-     9: [Color.RED, Color.BLUE],
-    10: [Color.RED],
-    11: [Color.RED, Color.GREEN, Color.BLUE],
-    12: [Color.GREEN],
-    13: [Color.BLUE, Color.GREEN],
-    14: [Color.GREEN],
-    15: [Color.GREEN, Color.BLUE, Color.YELLOW],
-    16: [Color.YELLOW],
-    17: [Color.YELLOW, Color.BLUE],
-    18: [Color.YELLOW],
-    19: [Color.BLUE],
-    20: [Color.BLUE],
-    21: [Color.BLUE]
+     0: [1, 2, 4],
+     1: [1, 4],
+     2: [1],
+     3: [1, 2],
+     4: [2],
+     5: [2, 4],
+     6: [4],
+     7: [1, 4, 3],
+     8: [1],
+     9: [1, 3],
+    10: [1],
+    11: [1, 2, 3],
+    12: [2],
+    13: [3, 2],
+    14: [2],
+    15: [2, 3, 4],
+    16: [4],
+    17: [4, 3],
+    18: [4],
+    19: [3],
+    20: [3],
+    21: [3]
 }
 # for k, v in pieces.items(): pieces[k] = deque(v)
 
@@ -81,29 +84,29 @@ move_arr = [[0,  [[1, 3, 5],    [2, 4, 6]]],  # rlt
             [11, [[10, 12, 19], [3, 13, 9]]], # rtl
             [15, [[16, 14, 20], [5, 13, 17]]],# rlt
             [7,  [[8, 18, 21],  [1, 17, 9]]]] # ltr
-corners = [[Dir.RIGHT, Dir.LEFT, Dir.TOP],
-           [Dir.RIGHT, Dir.TOP, Dir.LEFT],
-           [Dir.RIGHT, Dir.LEFT, Dir.TOP],
-           [Dir.LEFT, Dir.TOP, Dir.RIGHT]]
-revmap = {Color.RED: {
-                        Dir.TOP: {Dir.RIGHT: True, Dir.LEFT: False},
-                        Dir.LEFT: {Dir.RIGHT: False, Dir.LEFT: True},
-                        Dir.RIGHT: {Dir.RIGHT: True, Dir.LEFT: True}
+corners = [[-1, 1, 0],
+           [-1, 0, 1],
+           [-1, 1, 0],
+           [1, 0, -1]]
+revmap = {1: {
+                        0: {-1: True, 1: False},
+                        1: {-1: False, 1: True},
+                        -1: {-1: True, 1: True}
                      },
-          Color.GREEN: {
-                        Dir.TOP: {Dir.RIGHT: False, Dir.LEFT: True},
-                        Dir.LEFT: {Dir.RIGHT: True, Dir.LEFT: False},
-                        Dir.RIGHT: {Dir.RIGHT: True, Dir.LEFT: True}
+          2: {
+                        0: {-1: False, 1: True},
+                        1: {-1: True, 1: False},
+                        -1: {-1: True, 1: True}
                        },
-          Color.BLUE: {
-                        Dir.TOP: {Dir.RIGHT: False, Dir.LEFT: False},
-                        Dir.LEFT: {Dir.RIGHT: False, Dir.LEFT: False},
-                        Dir.RIGHT: {Dir.RIGHT: False, Dir.LEFT: False}
+          3: {
+                        0: {-1: False, 1: False},
+                        1: {-1: False, 1: False},
+                        -1: {-1: False, 1: False}
                        },
-          Color.YELLOW: {
-                        Dir.TOP: {Dir.RIGHT: True, Dir.LEFT: False},
-                        Dir.LEFT: {Dir.RIGHT: False, Dir.LEFT: True},
-                        Dir.RIGHT: {Dir.RIGHT: True, Dir.LEFT: True}
+          4: {
+                        0: {-1: True, 1: False},
+                        1: {-1: False, 1: True},
+                        -1: {-1: True, 1: True}
                        }
          }
 sides = {i: [] for i in Color}
@@ -113,22 +116,22 @@ for n, colors in pieces.items():
 side = "  {0}  \n {1}{2}{3} \n{4}{5}{6}{7}{8}\n"
 
 actions = {
-    # 0: (Color.RED, 0, Dir.LEFT),
-    1: (Color.RED, 1, Dir.LEFT),
-    # 2: (Color.RED, 0, Dir.RIGHT),
-    3: (Color.RED, 1, Dir.RIGHT),
-    # 4: (Color.BLUE, 0, Dir.LEFT),
-    5: (Color.BLUE, 1, Dir.LEFT),
-    # 6: (Color.BLUE, 0, Dir.RIGHT),
-    7: (Color.BLUE, 1, Dir.RIGHT),
-    # 8: (Color.YELLOW, 0, Dir.LEFT),
-    9: (Color.YELLOW, 1, Dir.LEFT),
-    # 10: (Color.YELLOW, 0, Dir.RIGHT),
-    11: (Color.YELLOW, 1, Dir.RIGHT),
-    # 12: (Color.GREEN, 0, Dir.LEFT),
-    13: (Color.GREEN, 1, Dir.LEFT),
-    # 14: (Color.GREEN, 0, Dir.RIGHT),
-    15: (Color.GREEN, 1, Dir.RIGHT),
+    # 0: (1, 0, 1),
+    1: (1, 1, 1),
+    # 2: (1, 0, -1),
+    3: (1, 1, -1),
+    # 4: (3, 0, 1),
+    5: (3, 1, 1),
+    # 6: (3, 0, -1),
+    7: (3, 1, -1),
+    # 8: (4, 0, 1),
+    9: (4, 1, 1),
+    # 10: (4, 0, -1),
+    11: (4, 1, -1),
+    # 12: (2, 0, 1),
+    13: (2, 1, 1),
+    # 14: (2, 0, -1),
+    15: (2, 1, -1),
 }
 # 5, 6
 antithetic = {1: 3, 3: 1,

@@ -7,10 +7,10 @@ import time
 import heapq
 
 
-color_conv = {'R': Color.RED, 'G': Color.GREEN, 'Y': Color.YELLOW, 'B': Color.BLUE}
+# color_conv = {'R': Color.RED, 'G': Color.GREEN, 'Y': Color.YELLOW, 'B': Color.BLUE}
 
 def rot(arr, direction):
-    if direction.value == -1:
+    if direction == -1:
         return arr[1:] + [arr[0]]
     return [arr[-1]] + arr[:-1]
     # if direction.value == -1:
@@ -26,7 +26,7 @@ class Tetra:
     def move(self, move: Color, level: int, direction: Dir, out=False):
         if out: print("moving", move, level, direction)
 
-        aff0, affected = move_arr[move.value - 1]
+        aff0, affected = move_arr[move - 1]
 
         r = revmap[move]
 
@@ -34,7 +34,7 @@ class Tetra:
         if level == 0: return
 
         for arr in affected:
-            for k, i, j in zip(corners[move.value - 1], arr, rot([self.pieces[i] for i in arr], direction)):
+            for k, i, j in zip(corners[move - 1], arr, rot([self.pieces[i] for i in arr], direction)):
                 if r[k][direction]:
                     j = j[::-1]  # .reverse()
                 self.pieces[i] = j
@@ -75,9 +75,9 @@ class Tetra:
         # return ''.join(side.format(*[self.pieces[j][k].name[0] for (j, k) in [sides[c][i] for i in order[c.value - 1]]]) for c in Color)
         s = ""
         for c in Color:
-            o = order[c.value - 1]
+            o = order[c - 1]
             x = [sides[c][i] for i in o]
-            x = [self.pieces[j][k].name[0] for (j, k) in x]
+            x = [' RGBY'[self.pieces[j][k]] for (j, k) in x]
             s += side.format(*x)
         return s
 

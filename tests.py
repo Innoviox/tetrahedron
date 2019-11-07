@@ -2,7 +2,7 @@ from rubix import *
 
 def test():
     strs = {
-        Color.RED: {Dir.LEFT: """  Y  
+        1: {1: """  Y  
  YYY 
 RRRRR
   R  
@@ -13,7 +13,7 @@ GGGGG
 BBBBB
   G  
  GGG 
-YYYYY""", Dir.RIGHT: """  G  
+YYYYY""", -1: """  G  
  GGG 
 RRRRR
   Y  
@@ -24,7 +24,7 @@ GGGGG
 BBBBB
   R  
  RRR 
-YYYYY"""}, Color.GREEN: {Dir.LEFT: """  R  
+YYYYY"""}, 2: {1: """  R  
  BRR 
 BBBRR
   G  
@@ -35,7 +35,7 @@ GGRRR
 GGGBB
   Y  
  YYY
-YYYYY""", Dir.RIGHT: """  R  
+YYYYY""", -1: """  R  
  GRR 
 GGGRR
   G  
@@ -46,7 +46,7 @@ GGBBB
 RRRBB
   Y  
  YYY 
-YYYYY"""}, Color.YELLOW: {Dir.LEFT: """  R  
+YYYYY"""}, 4: {1: """  R  
  RRB 
 RRBBB
   G  
@@ -57,7 +57,7 @@ GGGGG
 BBBBB
   Y  
  RYY 
-RRRYY""", Dir.RIGHT: """  R  
+RRRYY""", -1: """  R  
  RRY 
 RRYYY
   G  
@@ -68,7 +68,7 @@ GGGGG
 BBBBB
   Y  
  BYY 
-BBBYY"""}, Color.BLUE: {Dir.LEFT: """  R  
+BBBYY"""}, 3: {1: """  R  
  RRR 
 RRRRR
   G  
@@ -79,7 +79,7 @@ YYYGG
 BBGGG
   Y  
  YYB 
-YYBBB""", Dir.RIGHT: """  R  
+YYBBB""", -1: """  R  
  RRR 
 RRRRR
   G  
@@ -93,7 +93,7 @@ BBYYY
 YYGGG"""}}
     for c in Color:
         for d in Dir:
-            if d is Dir.TOP: continue
+            if d is 0: continue
             t = Tetra()
             t.move(c, 1, d)
             if c not in strs: continue
@@ -112,22 +112,22 @@ test()
 def corkin_1():
     t = Tetra()
 
-    t.move(Color.GREEN, 1, Dir.RIGHT)
-    t.move(Color.YELLOW, 1, Dir.RIGHT)
-    t.move(Color.GREEN, 1, Dir.LEFT)
-    t.move(Color.YELLOW, 1, Dir.LEFT)
-    t.move(Color.GREEN, 1, Dir.LEFT)
-    t.move(Color.RED, 1, Dir.LEFT)
-    t.move(Color.GREEN, 1, Dir.RIGHT)
-    t.move(Color.RED, 1, Dir.RIGHT)
-    t.move(Color.GREEN, 1, Dir.RIGHT)
-    t.move(Color.YELLOW, 1, Dir.RIGHT)
-    t.move(Color.GREEN, 1, Dir.LEFT)
-    t.move(Color.YELLOW, 1, Dir.LEFT)
-    t.move(Color.GREEN, 1, Dir.LEFT)
-    t.move(Color.RED, 1, Dir.LEFT)
-    t.move(Color.GREEN, 1, Dir.RIGHT)
-    t.move(Color.RED, 1, Dir.RIGHT)
+    t.move(2, 1, -1)
+    t.move(4, 1, -1)
+    t.move(2, 1, 1)
+    t.move(4, 1, 1)
+    t.move(2, 1, 1)
+    t.move(1, 1, 1)
+    t.move(2, 1, -1)
+    t.move(1, 1, -1)
+    t.move(2, 1, -1)
+    t.move(4, 1, -1)
+    t.move(2, 1, 1)
+    t.move(4, 1, 1)
+    t.move(2, 1, 1)
+    t.move(1, 1, 1)
+    t.move(2, 1, -1)
+    t.move(1, 1, -1)
 
     print(t)
 
