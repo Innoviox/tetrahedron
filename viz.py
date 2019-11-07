@@ -52,7 +52,7 @@ class Physical:
             yield ((location[v1], location[v2], location[v3], f1, f2) for v1, v2, v3, f1, f2 in side)
 
     def get_color(self, face, side):
-        return self.tetra.pieces[face][side].name.title()
+        return ['', 'Red', 'Green', 'Blue', 'Yellow'][self.tetra.pieces[face][side]]
 
 ######################
 #                    #
