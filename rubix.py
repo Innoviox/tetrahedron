@@ -104,7 +104,7 @@ class Tetra:
             path = nodes.popleft()
             if cache.move(path).is_solved(): return path
             nodes.extend([path + (i,) for i in actions
-                          if not path or (i - path[-1] and i - antithetic[path[-1]])])
+                          if not path or (i != path[-1] and i != antithetic[path[-1]])])
 
 class MoveCache():
     def __init__(self, t):
