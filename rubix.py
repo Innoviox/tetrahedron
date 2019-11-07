@@ -35,9 +35,8 @@ class Tetra:
 
         for arr in affected:
             for k, i, j in zip(corners[move - 1], arr, rot([self.pieces[i] for i in arr], direction)):
-                if r[k][direction]:
-                    j = j[::-1]  # .reverse()
-                self.pieces[i] = j
+                # .reverse()
+                self.pieces[i] = j[::-1] if r[k][direction] else j #[self.pieces[i] for i in j]
         return self
 
     def score(self):
