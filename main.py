@@ -17,6 +17,11 @@ import tests
 t = Tetra()
 if viz: viz.render(t)
 
+t.cronkin()
+print(t)
+t.cronkin()
+print(t)
+
 """
 moving <GREEN: 2> 1 <LEFT: 1>
 moving <RED: 1> 1 <RIGHT: -1>
@@ -33,10 +38,12 @@ moving <GREEN: 2> 1 <LEFT: 1>
 (15, 7, 3, 15, 3, 7, 1)
 """
 
-# for i in [13, 3, 15, 15, 13, 5, 13, 3, 5, 13]:
-#     t.move(*actions[i])
+for i in [13, 3, 15, 15, 13, 5, 13, 3, 5, 13]:
+    t.move(*actions[i])
 
-t.random(n=10, out=True)
+
+#
+# t.random(n=10, out=True)
 
 ti = time.time()
 x = t.solve_bfs()
