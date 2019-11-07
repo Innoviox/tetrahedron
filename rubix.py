@@ -7,7 +7,7 @@ import time
 import heapq
 
 
-# color_conv = {'R': Color.RED, 'G': Color.GREEN, 'Y': Color.YELLOW, 'B': Color.BLUE}
+# color_conv = {'R': 1, 'G': 2, 'Y': 4, 'B': 3}
 
 def rot(arr, direction):
     if direction == -1:
@@ -46,17 +46,17 @@ class Tetra:
     def random(self, n=1, out=False):
         for i in range(n):
             n = randint(0, 1) if len(list(actions.keys())) == 16 else 1
-            self.move(choice(list(Color)), n, choice([Dir.LEFT, Dir.RIGHT]), out=out)
+            self.move(choice(list(Color)), n, choice([1, -1]), out=out)
 
     def cronkin(self):
-        self.move(Color.GREEN, 1, Dir.RIGHT)
-        self.move(Color.YELLOW, 1, Dir.RIGHT)
-        self.move(Color.GREEN, 1, Dir.LEFT)
-        self.move(Color.YELLOW, 1, Dir.LEFT)
-        self.move(Color.GREEN, 1, Dir.LEFT)
-        self.move(Color.RED, 1, Dir.LEFT)
-        self.move(Color.GREEN, 1, Dir.RIGHT)
-        self.move(Color.RED, 1, Dir.RIGHT)
+        self.move(2, 1, -1)
+        self.move(4, 1, -1)
+        self.move(2, 1, 1)
+        self.move(4, 1, 1)
+        self.move(2, 1, 1)
+        self.move(1, 1, 1)
+        self.move(2, 1, -1)
+        self.move(1, 1, -1)
 
     def to_space(self):
         box = np.zeros((4, 9))

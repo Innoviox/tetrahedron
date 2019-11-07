@@ -1,4 +1,4 @@
-viz = False
+viz = True
 if viz: import viz
 from rubix import Tetra, actions, time
 
@@ -22,10 +22,10 @@ if viz: viz.render(t)
 (15, 7, 3, 15, 3, 7, 1)
 """
 
-for i in [13, 3, 15, 15, 13, 5, 13, 3, 5, 13]:
-    t.move(*actions[i])
+# for i in [13, 3, 15, 15, 13, 5, 13, 3, 5, 13]:
+#     t.move(*actions[i])
 #
-# t.random(n=10, out=True)
+t.random(n=5000, out=True)
 
 ti = time.time()
 x = t.solve_bfs()
