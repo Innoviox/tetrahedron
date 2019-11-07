@@ -11,8 +11,11 @@ color_conv = {'R': Color.RED, 'G': Color.GREEN, 'Y': Color.YELLOW, 'B': Color.BL
 
 def rot(arr, direction):
     if direction.value == -1:
-        return [arr[1], arr[2], arr[0]]
-    return [arr[2], arr[0], arr[1]]
+        return arr[1:] + [arr[0]]
+    return [arr[-1]] + arr[:-1]
+    # if direction.value == -1:
+    #     return [arr[1], arr[2], arr[0]]
+    # return [arr[2], arr[0], arr[1]]
 
 class Tetra:
     def __init__(self, start=True):
@@ -29,12 +32,8 @@ class Tetra:
         for arr in affected:
             for k, (i, j) in enumerate(zip(arr, rot([self.pieces[i] for i in arr], direction))):
                 if revmap[move][corners[move.value - 1][k]][direction]:
-                    j = j[::-1]
-                    # k = j[::-1]
-                    # j.reverse()
-                    # assert k == j
-                    # j = k
-                self.pieces[i] = j # [::revmap[move][corners[move.value - 1][k]][direction]]
+                    j = j[::-1] # .reverse()
+                self.pieces[i] = j
         return self
 
     def score(self):
