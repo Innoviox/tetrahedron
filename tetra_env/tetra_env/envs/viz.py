@@ -2,7 +2,7 @@ import pygame
 from numpy import array
 from math import cos, sin
 from itertools import combinations
-from .rubix import Tetra, Color, Dir
+from rubix import Tetra, Color, Dir
 from pygame import K_q, K_w, K_a, K_s, K_z, K_x
 
 ######################
@@ -169,7 +169,7 @@ class Paint:
 vertices = []
 faces = []
 fill = None
-for i in open("tetra_env/tetra_env/envs/tetra.txt"):
+for i in open("tetra.txt"):
     if i.startswith("#"):
         _, fill, *_ = i.split()
         faces.append([])

@@ -1,0 +1,55 @@
+from envs import viz
+from envs import Tetra, actions
+
+t = Tetra()
+
+# t.move(*actions[2])
+# t.move(*actions[0])
+
+t.random(n=500, out=True)
+print(t)
+
+x = t.solve_bfs()
+
+print(x)
+
+viz.render(t)
+
+
+n = 0
+while 1:
+    flag = True
+    while flag:
+        try:
+            viz.engine.tick()
+        except KeyboardInterrupt:
+            if input() != 'n':
+                flag = False
+            else:
+                exit()
+    t.move(*actions[x[n]])
+    n += 1
+
+def viz_test():
+    t = viz.Tetra()
+
+
+
+
+    viz.render(t)
+
+    # t.move(viz.Color.GREEN, 1, viz.Dir.RIGHT, out=True)
+
+
+
+    while 1:
+        flag = True
+        t.random(n=50, out=True)
+        while flag:
+            try:
+                viz.engine.tick()
+            except KeyboardInterrupt:
+                if input() != 'n':
+                    flag = False
+                else:
+                    exit()
