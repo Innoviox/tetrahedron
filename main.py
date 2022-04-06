@@ -25,7 +25,17 @@ if viz: viz.render(t)
 # for i in [13, 3, 15, 15, 13, 5, 13, 3, 5, 13]:
 #     t.move(*actions[i])
 #
-t.random(n=10, out=True)
+# t.random(n=10, out=True)
+
+for _ in range(10):
+    t.random(n=1, out=True)
+    flag = True
+    while flag:
+        try:
+            viz.engine.tick()
+        except KeyboardInterrupt:
+            break
+    # t.move(*actions[x[n]])
 
 ti = time.time()
 x = t.solve_bfs()
