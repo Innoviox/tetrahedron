@@ -74,6 +74,7 @@ class Tetra:
         for c in Color:
             o = order[c - 1]
             x = [sides[c][i] for i in o]
+            print(c, str(c), x, o, sides[c])
             x = [' RGBY'[self.pieces[j][k]] for (j, k) in x]
             s += side.format(*x)
         return s
@@ -91,7 +92,8 @@ class Tetra:
         return Tetra.of(self)
 
     def is_solved(self):
-        return self.pieces == pieces
+        # return self.pieces == goal_pieces
+        return all(self.pieces[i] == goal_pieces[i] for i in [1, 3, 5, 9, 13])
 
     def step(self, act):
         return Tetra.of(self).move(*act)

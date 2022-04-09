@@ -16,6 +16,7 @@ import tests
 
 t = Tetra()
 if viz: viz.render(t)
+print(str(t))
 
 """
 9.689351797103882
@@ -27,8 +28,9 @@ if viz: viz.render(t)
 #
 # t.random(n=10, out=True)
 
-for _ in range(10):
-    t.random(n=1, out=True)
+# for _ in range(10):
+#     t.random(n=1, out=True)
+"""
     flag = True
     while flag:
         try:
@@ -36,7 +38,7 @@ for _ in range(10):
         except KeyboardInterrupt:
             break
     # t.move(*actions[x[n]])
-
+"""
 ti = time.time()
 x = t.solve_bfs()
 print(time.time() - ti)
